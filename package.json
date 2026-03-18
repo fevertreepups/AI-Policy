@@ -1,0 +1,11 @@
+{
+  "name": "ai-policy-tracker",
+  "version": "1.0.0",
+  "description": "AI Policy Tracker - Government Bills & Regulations",
+  "scripts": {
+    "start": "npx serve -s . -l $PORT"
+  },
+  "dependencies": {
+    "serve": "^14.2.0"
+  }
+}
