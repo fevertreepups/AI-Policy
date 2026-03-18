@@ -2029,15 +2029,46 @@
                 grid-template-columns: 1fr !important;
             }
 
+            /* Lobbying 2-col grid → single column */
+            #lobbying div[style*="grid-template-columns:1fr 1fr"] {
+                grid-template-columns: 1fr !important;
+            }
+
+            /* Bar charts: tighter on mobile */
+            .bar-label { min-width: 70px; font-size: 11px; }
+            .bar-amount { min-width: 55px; font-size: 11px; }
+            .bar-container { height: 22px; }
+            .bar-chart { gap: 12px; }
+
+            /* Lobbyist & Politician cards: 1 per page */
+            .lob-card, .pol-card {
+                min-width: calc(100% - 0px) !important;
+                max-width: calc(100% - 0px) !important;
+            }
+
+            /* Carousel containers: no overflow clipping issues */
+            #lobbying div[style*="position:relative"],
+            #politicians div[style*="position:relative"] {
+                overflow: visible;
+            }
+
             /* Resource links */
             .resource-section { gap: 16px; }
 
-            /* Prev/next buttons: smaller on mobile */
+            /* Money/info boxes: full width stacking */
+            .money-section { gap: 12px; }
+            .info-box { padding: 16px; }
+            .info-title { font-size: 14px; }
+            .info-content { font-size: 13px; }
+
+            /* Prev/next buttons: smaller on mobile, moved inward */
             #cases-prev, #cases-next,
             #pol-prev, #pol-next,
             #lob-prev, #lob-next {
                 width: 28px; height: 28px;
             }
+            #cases-prev, #pol-prev, #lob-prev { left: 4px !important; }
+            #cases-next, #pol-next, #lob-next { right: 4px !important; }
         }
 
         /* ── Small phones ── */
@@ -2054,6 +2085,9 @@
                 max-width: 90vw !important;
                 padding: 16px;
             }
+            .bar-label { min-width: 55px; font-size: 10px; }
+            .bar-amount { min-width: 45px; font-size: 10px; }
+            .lob-card, .pol-card { padding: 16px !important; }
         }
         @keyframes blink-cursor {
             50% { border-color: transparent; }
@@ -4195,7 +4229,7 @@ var politicianData = [
 ];
 
 var polSlideIndex = 0;
-var polPerPage = 3;
+var polPerPage = window.innerWidth <= 768 ? 1 : 3;
 
 function renderPoliticianCards() {
     var container = document.getElementById('politician-cards');
@@ -4397,7 +4431,7 @@ var lobbyistData = [
 ];
 
 var lobSlideIndex = 0;
-var lobPerPage = 3;
+var lobPerPage = window.innerWidth <= 768 ? 1 : 3;
 
 function renderLobbyistCards() {
     var container = document.getElementById('lobbyist-cards');
@@ -4513,7 +4547,21 @@ function initCasesScroll() {
     casesPage = 0;
     sizeCaseCards();
     updateCasesView();
-    window.addEventListener('resize', function() { sizeCaseCards(); updateCasesView(); });
+    window.addEventListener('resize', function() {
+        sizeCaseCards(); updateCasesView();
+        // Recalculate cards-per-page for lobbyist & politician carousels
+        var newPerPage = window.innerWidth <= 768 ? 1 : 3;
+        if (newPerPage !== polPerPage) {
+            polPerPage = newPerPage;
+            polSlideIndex = 0;
+            renderPoliticianCards();
+        }
+        if (newPerPage !== lobPerPage) {
+            lobPerPage = newPerPage;
+            lobSlideIndex = 0;
+            renderLobbyistCards();
+        }
+    });
 }
 
 function sizeCaseCards() {
