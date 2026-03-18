@@ -1936,67 +1936,123 @@
             display: none;
         }
 
+        /* ── Tablet ── */
+        @media (max-width: 960px) {
+            .content { padding: 24px 16px; }
+            .civic-grid { grid-template-columns: 1fr; }
+            .forecast-cards { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* ── Mobile ── */
         @media (max-width: 768px) {
+            /* Nav: horizontal scroll, smaller */
             .sidebar {
-                width: 70px;
-                padding: 12px 0;
+                height: auto;
+                padding: 0 12px;
+                overflow-x: auto;
             }
-
+            .sidebar-header { padding: 0 12px 0 0; }
+            .sidebar-header h1 { font-size: 13px; }
             .sidebar-nav a {
-                padding: 12px 8px;
+                padding: 8px 10px;
+                font-size: 11px;
             }
+            .sidebar-nav a span { display: none; }
+            .sidebar-nav a svg { width: 18px; height: 18px; }
 
-            .main {
-                margin-left: 70px;
-            }
-
-            .header {
-                padding: 16px 20px;
-                flex-direction: column;
-                gap: 12px;
-            }
-
-            .header h2 {
-                font-size: 22px;
-            }
+            .main { margin-left: 0; }
 
             .content {
-                padding: 20px;
+                padding: 16px 12px;
+                max-width: 100%;
             }
 
+            /* Stats grid: 2 columns */
             .stats-row {
                 grid-template-columns: 1fr 1fr;
-                gap: 16px;
+                gap: 12px;
+            }
+            .stat-card { padding: 16px; }
+            .stat-number { font-size: 24px; }
+            .stat-label { font-size: 10px; }
+
+            /* Charts: single column */
+            .charts-grid { grid-template-columns: 1fr; gap: 16px; }
+
+            /* Legislative pipeline: 2x2 grid */
+            .section > div[style*="display:flex;gap:4px"],
+            .section > div[style*="display:flex;gap:12px"] {
+                flex-wrap: wrap !important;
             }
 
-            .stat-card {
-                padding: 20px;
+            /* Filter bar: wrap */
+            .filter-bar { flex-wrap: wrap; gap: 8px; }
+            .filter-btn { padding: 8px 14px; font-size: 12px; }
+            .search-input { min-width: 100%; }
+
+            /* Tables: scroll horizontally */
+            .table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+            table { font-size: 12px; min-width: 600px; }
+            th, td { padding: 10px 8px; }
+
+            /* Civic section */
+            .civic-grid { grid-template-columns: 1fr; }
+            .civic-title { font-size: 24px; }
+            .civic-subtitle { font-size: 13px; }
+            .civic-card { padding: 20px; }
+
+            /* Forecast cards: single column */
+            .forecast-cards { grid-template-columns: 1fr; }
+
+            /* Court cases: single card visible */
+            .case-card {
+                min-width: 85vw !important;
+                max-width: 85vw !important;
             }
 
-            .stat-number {
-                font-size: 28px;
+            /* Timeline scroll: shorter */
+            .timeline-scroll-container { max-height: 300px; }
+
+            /* Impact hero */
+            .impact-hero { padding: 20px 12px 16px; }
+            .hero-line { font-size: 22px; }
+            .impact-hero-subtitle { font-size: 13px; }
+
+            /* World map */
+            .world-map-svg { min-height: 200px; }
+
+            /* Skyline bridge */
+            .skyline-bridge { height: 120px; }
+
+            /* Side-by-side charts to stacked */
+            div[style*="grid-template-columns: 1fr 1fr"] {
+                grid-template-columns: 1fr !important;
             }
 
-            .charts-grid {
-                grid-template-columns: 1fr;
-                gap: 20px;
-            }
+            /* Resource links */
+            .resource-section { gap: 16px; }
 
-            .filter-bar {
-                flex-direction: column;
+            /* Prev/next buttons: smaller on mobile */
+            #cases-prev, #cases-next,
+            #pol-prev, #pol-next,
+            #lob-prev, #lob-next {
+                width: 28px; height: 28px;
             }
+        }
 
-            .search-input {
-                min-width: 100%;
-            }
-
-            table {
-                font-size: 12px;
-            }
-
-            th,
-            td {
-                padding: 10px;
+        /* ── Small phones ── */
+        @media (max-width: 420px) {
+            .sidebar-header h1 { font-size: 11px; }
+            .sidebar-nav a { padding: 6px 6px; }
+            .content { padding: 12px 8px; }
+            .stats-row { grid-template-columns: 1fr; gap: 10px; }
+            .civic-title { font-size: 20px; }
+            .hero-line { font-size: 18px; }
+            .chart-card, .info-box { padding: 16px; }
+            .case-card {
+                min-width: 90vw !important;
+                max-width: 90vw !important;
+                padding: 16px;
             }
         }
         @keyframes blink-cursor {
@@ -2870,7 +2926,7 @@
                         <button id="cases-prev" onclick="scrollCases(-1)" aria-label="Previous court cases" style="position:absolute;left:-16px;top:50%;transform:translateY(-50%);z-index:2;width:36px;height:36px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass-bg);backdrop-filter:blur(20px);box-shadow:var(--glass-shadow);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-dark);transition:all 0.2s;" onmouseenter="this.style.background='rgba(74,140,58,0.1)';this.style.borderColor='var(--primary)'" onmouseleave="this.style.background='var(--glass-bg)';this.style.borderColor='var(--glass-border)'">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
                         </button>
-                        <div style="overflow:hidden;border-radius:16px;">
+                        <div style="overflow:hidden;border-radius:16px;-webkit-overflow-scrolling:touch;">
                             <div id="cases-track" style="display:flex;gap:16px;transition:transform 0.4s cubic-bezier(0.25,0.1,0.25,1);align-items:flex-start;">
 
                     <div class="case-card">
