@@ -3,10 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Policy Tracker - Government Bills & Regulations</title>
+    <title>PolicyArchivist - AI Policy Tracker</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-m": "#28691b",
+              "inverse-primary-m": "#91d87c",
+              "primary-container-m": "#418332",
+              "on-surface-variant-m": "#41493c",
+              "secondary-m": "#006b5d",
+              "secondary-container-m": "#96f0dd",
+              "surface-container-low-m": "#e6f9da",
+              "surface-m": "#edffe1",
+              "surface-container-highest-m": "#d5e8ca",
+              "surface-variant-m": "#d5e8ca",
+              "error-m": "#ba1a1a",
+              "outline-variant-m": "#c0c9b9",
+              "surface-container-m": "#e1f4d5",
+              "outline-m": "#717a6b",
+              "on-surface-m": "#111f0c",
+              "on-primary-m": "#ffffff",
+              "error-container-m": "#ffdad6",
+              "on-error-container-m": "#93000a",
+              "on-secondary-container-m": "#006f61",
+              "primary-fixed-m": "#acf595",
+              "tertiary-m": "#4d6241",
+              "surface-container-high-m": "#dbeecf",
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+            },
+          },
+        },
+      }
+    </script>
     <style>
         * {
             margin: 0;
@@ -243,11 +282,13 @@
         }
 
         .sidebar-nav a.active {
-            color: var(--primary);
-            background: rgba(74,140,58,0.08);
+            color: #fff;
+            background: linear-gradient(135deg, #4A8C3A, #2A8A7A);
             border-left-color: transparent;
-            border-bottom-color: #2A8A7A;
+            border-bottom-color: transparent;
             font-weight: 600;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(74,140,58,0.25);
         }
 
         .main {
@@ -263,11 +304,18 @@
         }
 
         .header {
-            display: none;
+            padding: 20px 32px 0;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
         }
 
         .header h2 {
-            display: none;
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--text-dark);
+            font-family: 'Inter', sans-serif;
+            letter-spacing: -0.02em;
         }
 
         /* Theme toggle removed */
@@ -283,12 +331,13 @@
         }
 
         .section {
-            opacity: 1;
-            transform: none;
-            display: block;
+            opacity: 0;
+            transform: translateY(12px);
+            display: none;
             margin-bottom: 24px;
             padding-top: 8px;
             scroll-margin-top: 60px;
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
         .section.active {
@@ -2215,6 +2264,13 @@
         .civic-card .civic-prompt-box {
             transition: opacity 0.3s ease;
         }
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .section.active {
+            animation: fadeSlideIn 0.3s ease forwards;
+        }
         @keyframes revolve-scroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
@@ -2223,61 +2279,73 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* ── Mobile/Desktop view toggle ── */
+        .mobile-app-view { display: none; }
+        .desktop-app-view { display: block; }
+
+        @media (max-width: 768px) {
+            .mobile-app-view { display: block; }
+            .desktop-app-view { display: none !important; }
+        }
+
+        /* Mobile view styles */
+        .mobile-app-view .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mobile-app-view .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .mobile-app-view .bg-page-gradient-m {
+            background: linear-gradient(135deg, #e1f4d5 0%, #f7fff2 50%, #ffffff 100%);
+            background-attachment: fixed;
+        }
+
+        /* Mobile bottom nav active pill */
+        .mob-nav-active {
+            background: linear-gradient(135deg, #28691b, #418332);
+            color: white;
+            border-radius: 1rem;
+            padding: 0.5rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(40, 105, 27, 0.2);
+        }
     </style>
 </head>
 <body>
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- DESKTOP VIEW (hidden on mobile <=768px)       -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="desktop-app-view">
     <div id="mouse-gradient"></div>
 
     <!-- Mobile nav overlay & drawer -->
     <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
     <nav class="mobile-nav-drawer" id="mobile-nav-drawer">
-        <h2>AI Policy</h2>
-        <a href="#" data-section="impact" class="mobile-nav-link active">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-            Does it affect you
+        <h2>PolicyArchivist</h2>
+        <a href="#" data-section="home" class="mobile-nav-link active">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            Home
         </a>
-        <a href="#" data-section="civic" class="mobile-nav-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg>
-            Think Critically
-        </a>
-        <a href="#" data-section="dashboard" class="mobile-nav-link">
+        <a href="#" data-section="bills" class="mobile-nav-link">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/></svg>
-            Key Policies
+            Bills
         </a>
-        <a href="#" data-section="timeline" class="mobile-nav-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/></svg>
-            Timeline
+        <a href="#" data-section="money" class="mobile-nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+            Money Trail
         </a>
-        <a href="#" data-section="lobbying" class="mobile-nav-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9-4.03 9-9 9zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 9 15.5 9 14 9.67 14 10.5s.67 1.5 1.5 1.5z"/></svg>
-            Lobbying
+        <a href="#" data-section="people" class="mobile-nav-link">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            People &amp; Cases
         </a>
-        <a href="#" data-section="campaign" class="mobile-nav-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
-            Campaign Finance
-        </a>
-        <a href="#" data-section="courts" class="mobile-nav-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2V17zm4 0h-2V7h2V17zm4 0h-2v-11h2V17z"/></svg>
-            Court Cases
-        </a>
-        <a href="#" data-section="politicians" class="mobile-nav-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-            Politicians
-        </a>
-        <a href="#" data-section="forecast" class="mobile-nav-link">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z"/></svg>
-            Forecast
-        </a>
-        <a href="#" data-section="global" class="mobile-nav-link">
+        <a href="#" data-section="outlook" class="mobile-nav-link">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-            Global
+            Outlook
         </a>
     </nav>
 
     <div class="container">
         <aside class="sidebar">
             <div class="sidebar-header">
-                <h1>AI Policy</h1>
+                <h1>PolicyArchivist</h1>
                 <button class="collapse-btn" id="collapse-btn" title="Toggle sidebar" aria-label="Toggle navigation">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M7 8l3-3 3 3m-6 6l3 3 3-3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
@@ -2288,89 +2356,47 @@
                 <span></span><span></span><span></span>
             </button>
             <nav class="sidebar-nav">
-                <li><a href="#" data-section="impact" class="nav-link active" title="Does it affect you">
+                <li><a href="#" data-section="home" class="nav-link active" title="Home">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
                     </svg>
-                    <span>Does it affect you</span>
+                    <span>Home</span>
                 </a></li>
-                <li><a href="#" data-section="civic" class="nav-link" title="Think Critically">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
-                    </svg>
-                    <span>Think Critically</span>
-                </a></li>
-                <li><a href="#" data-section="dashboard" class="nav-link" title="Key Policies">
+                <li><a href="#" data-section="bills" class="nav-link" title="Bills">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
                     </svg>
-                    <span>Key Policies</span>
+                    <span>Bills</span>
                 </a></li>
-                <li><a href="#" data-section="timeline" class="nav-link" title="Timeline">
+                <li><a href="#" data-section="money" class="nav-link" title="Money Trail">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm2-7h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z"/>
+                        <path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/>
                     </svg>
-                    <span>Timeline</span>
+                    <span>Money Trail</span>
                 </a></li>
-                <li><a href="#" data-section="lobbying" class="nav-link" title="Lobbying">
+                <li><a href="#" data-section="people" class="nav-link" title="People &amp; Cases">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 20c-4.97 0-9-4.03-9-9s4.03-9 9-9 9 4.03 9 9-4.03 9-9 9zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 9 15.5 9 14 9.67 14 10.5s.67 1.5 1.5 1.5z"/>
+                        <path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/>
                     </svg>
-                    <span>Lobbying</span>
+                    <span>People &amp; Cases</span>
                 </a></li>
-                <li><a href="#" data-section="campaign" class="nav-link" title="Campaign Finance">
+                <li><a href="#" data-section="outlook" class="nav-link" title="Outlook">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
                     </svg>
-                    <span>Campaign Finance</span>
-                </a></li>
-                <li><a href="#" data-section="courts" class="nav-link" title="Court Cases">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2V17zm4 0h-2V7h2V17zm4 0h-2v-11h2V17z"/>
-                    </svg>
-                    <span>Court Cases</span>
-                </a></li>
-                <li><a href="#" data-section="politicians" class="nav-link" title="Politicians">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                    </svg>
-                    <span>Politicians</span>
-                </a></li>
-                <li><a href="#" data-section="forecast" class="nav-link" title="Forecast">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
-                    </svg>
-                    <span>Forecast</span>
-                </a></li>
-                <li><a href="#" data-section="research" class="nav-link" title="Research Tools">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M15.5 1h-8C6.12 1 5 2.12 5 3.5v17C5 21.88 6.12 23 7.5 23h8c1.38 0 2.5-1.12 2.5-2.5v-17C18 2.12 16.88 1 15.5 1zm-4 21c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm4.5-4H7V4h9v14z"/>
-                    </svg>
-                    <span>Research Tools</span>
-                </a></li>
-                <li><a href="#" data-section="action" class="nav-link" title="Take Action">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z"/><path d="M20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
-                    </svg>
-                    <span>Take Action</span>
-                </a></li>
-                <li><a href="#" data-section="global" class="nav-link" title="Global">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                    </svg>
-                    <span>Global</span>
+                    <span>Outlook</span>
                 </a></li>
             </nav>
         </aside>
 
         <main class="main">
             <header class="header">
-                <h2 id="section-title">Dashboard Overview</h2>
+                <h2 id="section-title">Home</h2>
             </header>
 
             <div class="content">
                 <!-- SECTION 1: DOES IT AFFECT YOU -->
-                <section id="impact" class="section active">
+                <section id="home" class="section active">
                     <div class="impact-hero">
                         <div class="impact-doodle" id="impact-doodle"></div>
                         <div class="impact-doodle-left" id="impact-doodle-left"></div>
@@ -2379,7 +2405,7 @@
                             <span class="hero-line hero-bold" style="font-size: 42px; line-height: 1.1; background: linear-gradient(135deg, #4A8C3A, #5A9A42, #2A8A7A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">How does AI policy</span>
                             <span class="hero-line hero-bold" style="font-size: 42px; line-height: 1.1; background: linear-gradient(135deg, #2A8A7A, #4A8C3A); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">affect <em class="hero-italic" style="-webkit-text-fill-color: #2A8A7A; font-style: italic;">me</em>?</span>
                         </div>
-                        <div class="impact-hero-subtitle" style="font-size: 16px; max-width: 550px;">40+ bills are being debated right now that could change how you work, create, learn, and live. Find out which ones matter to you.</div>
+                        <div class="impact-hero-subtitle" style="font-size: 16px; max-width: 550px;">40+ bills could change how you work, create, and live.</div>
                         <div class="impact-search-center">
                             <div class="role-input-wrap">
                                 <svg class="search-icon-inline" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -2421,169 +2447,11 @@
 
                     <div class="impact-cards" id="impact-cards">
                     </div>
+                <!-- Civic section removed - content consolidated -->
                 </section>
 
-                <!-- SECTION: THINK CRITICALLY -->
-                <section id="civic" class="section">
-                    <div class="civic-hero-banner" style="position:relative;">
-                        <div class="civic-hero-icon">
-                            <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg" width="56" height="56">
-                                <circle cx="32" cy="24" r="12" stroke="#4A8C3A" stroke-width="2.5" fill="none"/>
-                                <path d="M32 12 L32 8 M32 36 L32 40 M20 24 L16 24 M44 24 L48 24 M23.5 15.5 L20.7 12.7 M40.5 32.5 L43.3 35.3 M23.5 32.5 L20.7 35.3 M40.5 15.5 L43.3 12.7" stroke="#5EA044" stroke-width="1.5" stroke-linecap="round"/>
-                                <circle cx="32" cy="24" r="5" fill="#4A8C3A" opacity="0.15"/>
-                                <circle cx="32" cy="24" r="2" fill="#4A8C3A"/>
-                                <path d="M20 46 C20 42 26 40 32 40 C38 40 44 42 44 46" stroke="#4A8C3A" stroke-width="2" fill="none" stroke-linecap="round"/>
-                                <path d="M14 52 C14 47 22 44 32 44 C42 44 50 47 50 52" stroke="#5EA044" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-dasharray="4 3"/>
-                            </svg>
-                        </div>
-                        <h3 class="civic-title" style="min-height:44px;">
-                            <span id="civic-typed"></span><span id="civic-cursor" style="border-right:2px solid var(--primary);animation:blink-cursor 0.8s step-end infinite;padding-right:2px;">&nbsp;</span>
-                        </h3>
-                        <p class="civic-subtitle" id="civic-subtitle" style="transition:opacity 0.4s ease;">Understanding AI policy isn't just about knowing what laws exist &mdash; it's about building the critical thinking skills to evaluate them and the civic muscle to shape them.</p>
-                    </div>
-
-                    <div class="civic-grid">
-                        <div class="civic-card">
-                            <div class="civic-card-number">01</div>
-                            <div class="civic-card-heading">Question the Framing</div>
-                            <p class="civic-card-text">Every bill frames AI as either a <strong>threat to contain</strong> or an <strong>innovation to protect</strong>. Ask: who benefits from this framing? What perspectives are missing? Read the actual bill text, not just headlines.</p>
-                            <div class="civic-prompt-box">
-                                <span class="civic-prompt-label">Ask yourself</span>
-                                Who funded this bill's sponsors? Does the legislation address root harms, or just symptoms?
-                            </div>
-                        </div>
-
-                        <div class="civic-card">
-                            <div class="civic-card-number">02</div>
-                            <div class="civic-card-heading">Follow the Money</div>
-                            <p class="civic-card-text">AI legislation is shaped by lobbying. The companies building AI systems spend millions influencing the rules. Cross-reference the <strong>Lobbying</strong> section of this tracker with bill sponsors to see whose interests align.</p>
-                            <div class="civic-prompt-box">
-                                <span class="civic-prompt-label">Ask yourself</span>
-                                If a tech company supports a regulation, does it create a moat against smaller competitors?
-                            </div>
-                        </div>
-
-                        <div class="civic-card">
-                            <div class="civic-card-number">03</div>
-                            <div class="civic-card-heading">Look for What's Missing</div>
-                            <p class="civic-card-text">Most AI bills focus on consumer-facing risks. But what about algorithmic bias in <strong>housing, lending, and criminal justice</strong>? What about environmental costs of training models? Strong democratic participation means advocating for the unrepresented.</p>
-                            <div class="civic-prompt-box">
-                                <span class="civic-prompt-label">Ask yourself</span>
-                                Whose voices are absent from this debate? Who bears the cost but has no seat at the table?
-                            </div>
-                        </div>
-
-                        <div class="civic-card">
-                            <div class="civic-card-number">04</div>
-                            <div class="civic-card-heading">Understand Tradeoffs</div>
-                            <p class="civic-card-text">Good policy requires tradeoffs. Age verification protects kids but risks privacy. AI safety rules protect consumers but may slow innovation. A critical thinker doesn't pick sides &mdash; they <strong>weigh evidence and demand transparency</strong>.</p>
-                            <div class="civic-prompt-box">
-                                <span class="civic-prompt-label">Ask yourself</span>
-                                What's the cost of action vs. inaction? Who decides what &ldquo;safe&rdquo; or &ldquo;fair&rdquo; means?
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="civic-grid">
-                        <div class="civic-card">
-                            <div class="civic-card-number">05</div>
-                            <div class="civic-card-heading">Share What You Learn</div>
-                            <p class="civic-card-text">Democracy works better when more people are informed. Share this tracker. Discuss AI policy at dinner. <strong>Explain the stakes</strong> to someone who hasn't thought about it yet.</p>
-                            <div class="civic-prompt-box">
-                                <span class="civic-prompt-label">Ask yourself</span>
-                                Who in your circle would benefit from understanding how AI policy affects them?
-                            </div>
-                        </div>
-
-                        <div class="civic-card">
-                            <div class="civic-card-number">06</div>
-                            <div class="civic-card-heading">Demand Algorithmic Transparency</div>
-                            <p class="civic-card-text">When platforms, employers, or governments use AI to make decisions about you, <strong>insist on knowing how</strong>. Support legislation that gives you the right to explanation.</p>
-                            <div class="civic-prompt-box">
-                                <span class="civic-prompt-label">Ask yourself</span>
-                                What AI-driven decisions affect your life today? Do you know how they work?
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- SKYLINE BRIDGE -->
-                <div class="skyline-bridge" style="position:relative;overflow:hidden;height:200px;margin:-12px 0 -12px;pointer-events:none;">
-                    <svg viewBox="0 0 1200 200" preserveAspectRatio="none" style="width:100%;height:100%;display:block;" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Sky gradient -->
-                        <defs>
-                            <linearGradient id="sky-grad" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="rgba(237,238,230,0)" />
-                                <stop offset="100%" stop-color="rgba(74,140,58,0.06)" />
-                            </linearGradient>
-                            <linearGradient id="bld-1" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#4A8C3A" stop-opacity="0.12"/>
-                                <stop offset="100%" stop-color="#2A8A7A" stop-opacity="0.08"/>
-                            </linearGradient>
-                            <linearGradient id="bld-2" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#2A8A7A" stop-opacity="0.15"/>
-                                <stop offset="100%" stop-color="#4A8C3A" stop-opacity="0.06"/>
-                            </linearGradient>
-                            <linearGradient id="bld-3" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stop-color="#6BAD52" stop-opacity="0.10"/>
-                                <stop offset="100%" stop-color="#9ACD6A" stop-opacity="0.05"/>
-                            </linearGradient>
-                        </defs>
-                        <rect width="1200" height="200" fill="url(#sky-grad)"/>
-
-                        <!-- Far buildings (lightest) -->
-                        <rect x="50" y="90" width="45" height="110" rx="2" fill="url(#bld-3)"/>
-                        <rect x="110" y="70" width="35" height="130" rx="2" fill="url(#bld-3)"/>
-                        <rect x="200" y="100" width="50" height="100" rx="2" fill="url(#bld-3)"/>
-                        <rect x="340" y="80" width="30" height="120" rx="2" fill="url(#bld-3)"/>
-                        <rect x="750" y="85" width="40" height="115" rx="2" fill="url(#bld-3)"/>
-                        <rect x="900" y="95" width="55" height="105" rx="2" fill="url(#bld-3)"/>
-                        <rect x="1050" y="75" width="35" height="125" rx="2" fill="url(#bld-3)"/>
-                        <rect x="1120" y="100" width="45" height="100" rx="2" fill="url(#bld-3)"/>
-
-                        <!-- Mid buildings -->
-                        <rect x="155" y="60" width="40" height="140" rx="2" fill="url(#bld-2)"/>
-                        <rect x="270" y="50" width="55" height="150" rx="2" fill="url(#bld-2)"/>
-                        <rect x="400" y="65" width="38" height="135" rx="2" fill="url(#bld-2)"/>
-                        <rect x="500" y="55" width="42" height="145" rx="2" fill="url(#bld-2)"/>
-                        <rect x="620" y="70" width="48" height="130" rx="2" fill="url(#bld-2)"/>
-                        <rect x="800" y="55" width="50" height="145" rx="2" fill="url(#bld-2)"/>
-                        <rect x="960" y="60" width="40" height="140" rx="2" fill="url(#bld-2)"/>
-
-                        <!-- Tall foreground buildings -->
-                        <rect x="80" y="45" width="28" height="155" rx="2" fill="url(#bld-1)"/>
-                        <rect x="305" y="30" width="30" height="170" rx="2" fill="url(#bld-1)"/>
-                        <!-- Capitol dome -->
-                        <rect x="555" y="55" width="60" height="145" rx="2" fill="url(#bld-1)"/>
-                        <ellipse cx="585" cy="55" rx="30" ry="18" fill="url(#bld-1)"/>
-                        <ellipse cx="585" cy="55" rx="14" ry="10" fill="rgba(74,140,58,0.08)"/>
-                        <rect x="581" y="30" width="8" height="25" rx="4" fill="url(#bld-1)"/>
-                        <!-- More tall buildings -->
-                        <rect x="680" y="40" width="35" height="160" rx="2" fill="url(#bld-1)"/>
-                        <rect x="860" y="35" width="32" height="165" rx="2" fill="url(#bld-1)"/>
-                        <rect x="1010" y="45" width="30" height="155" rx="2" fill="url(#bld-1)"/>
-
-                        <!-- Window dots on tallest buildings -->
-                        <g fill="rgba(255,255,255,0.5)">
-                            <rect x="310" y="45" width="4" height="4" rx="1"/><rect x="320" y="45" width="4" height="4" rx="1"/>
-                            <rect x="310" y="58" width="4" height="4" rx="1"/><rect x="320" y="58" width="4" height="4" rx="1"/>
-                            <rect x="310" y="71" width="4" height="4" rx="1"/><rect x="320" y="71" width="4" height="4" rx="1"/>
-                            <rect x="310" y="84" width="4" height="4" rx="1"/><rect x="320" y="84" width="4" height="4" rx="1"/>
-                            <rect x="686" y="55" width="4" height="4" rx="1"/><rect x="696" y="55" width="4" height="4" rx="1"/><rect x="706" y="55" width="4" height="4" rx="1"/>
-                            <rect x="686" y="68" width="4" height="4" rx="1"/><rect x="696" y="68" width="4" height="4" rx="1"/><rect x="706" y="68" width="4" height="4" rx="1"/>
-                            <rect x="686" y="81" width="4" height="4" rx="1"/><rect x="696" y="81" width="4" height="4" rx="1"/><rect x="706" y="81" width="4" height="4" rx="1"/>
-                            <rect x="565" y="70" width="4" height="4" rx="1"/><rect x="575" y="70" width="4" height="4" rx="1"/><rect x="585" y="70" width="4" height="4" rx="1"/><rect x="595" y="70" width="4" height="4" rx="1"/>
-                            <rect x="565" y="83" width="4" height="4" rx="1"/><rect x="575" y="83" width="4" height="4" rx="1"/><rect x="585" y="83" width="4" height="4" rx="1"/><rect x="595" y="83" width="4" height="4" rx="1"/>
-                            <rect x="565" y="96" width="4" height="4" rx="1"/><rect x="575" y="96" width="4" height="4" rx="1"/><rect x="585" y="96" width="4" height="4" rx="1"/><rect x="595" y="96" width="4" height="4" rx="1"/>
-                        </g>
-
-                        <!-- Ground line -->
-                        <line x1="0" y1="199" x2="1200" y2="199" stroke="rgba(74,140,58,0.1)" stroke-width="1"/>
-                    </svg>
-                </div>
-
-                <!-- SECTION 2: DASHBOARD -->
-                <section id="dashboard" class="section" style="padding-top:32px;">
+                <!-- SECTION 2: BILLS -->
+                <section id="bills" class="section" style="padding-top:32px;">
                     <h3>Key Policies</h3>
                     <div class="stats-row">
                         <div class="stat-card">
@@ -2644,10 +2512,6 @@
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                         </button>
                     </div>
-                </section>
-
-                <!-- BILL STATUS PIPELINE -->
-                <section id="pipeline" class="section">
                     <h3 style="margin-top:32px;">Legislative Pipeline</h3>
                     <div style="display:flex;gap:4px;margin-top:16px;margin-bottom:24px;align-items:stretch;">
                         <div style="flex:1;background:linear-gradient(135deg,rgba(74,140,58,0.08),rgba(74,140,58,0.04));border-radius:12px;padding:20px;text-align:center;border:1px solid var(--glass-border);">
@@ -2670,10 +2534,6 @@
                             <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.04em;color:var(--muted);margin-top:4px;">Signed Into Law</div>
                         </div>
                     </div>
-                </section>
-
-                <!-- SECTION 3: TIMELINE & CHARTS -->
-                <section id="timeline" class="section">
                     <div class="charts-grid">
                         <div class="chart-card">
                             <div class="chart-title">Bills by Category</div>
@@ -2859,34 +2719,10 @@
                 </section>
 
                 <!-- SECTION 4: LOBBYING -->
-                <section id="lobbying" class="section">
-                    <!-- Door ticker -->
-                    <div class="door-ticker" style="overflow:hidden;margin-bottom:16px;padding:10px 0;position:relative;">
-                        <div style="display:flex;gap:40px;animation:revolve-scroll 25s linear infinite;width:max-content;">
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.2;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#4A8C3A" stroke-width="1.5"/><rect x="2" y="2" width="14" height="36" rx="3 0 0 3" fill="#4A8C3A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#4A8C3A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.14;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#2A8A7A" stroke-width="1.5"/><rect x="16" y="2" width="14" height="36" rx="0 3 3 0" fill="#2A8A7A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#2A8A7A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.2;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#6BAD52" stroke-width="1.5"/><rect x="2" y="2" width="14" height="36" rx="3 0 0 3" fill="#6BAD52" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#6BAD52" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.14;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#4A8C3A" stroke-width="1.5"/><rect x="16" y="2" width="14" height="36" rx="0 3 3 0" fill="#4A8C3A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#4A8C3A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.2;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#2A8A7A" stroke-width="1.5"/><rect x="2" y="2" width="14" height="36" rx="3 0 0 3" fill="#2A8A7A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#2A8A7A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.14;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#6BAD52" stroke-width="1.5"/><rect x="16" y="2" width="14" height="36" rx="0 3 3 0" fill="#6BAD52" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#6BAD52" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.2;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#4A8C3A" stroke-width="1.5"/><rect x="2" y="2" width="14" height="36" rx="3 0 0 3" fill="#4A8C3A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#4A8C3A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.14;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#2A8A7A" stroke-width="1.5"/><rect x="16" y="2" width="14" height="36" rx="0 3 3 0" fill="#2A8A7A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#2A8A7A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.2;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#6BAD52" stroke-width="1.5"/><rect x="2" y="2" width="14" height="36" rx="3 0 0 3" fill="#6BAD52" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#6BAD52" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.14;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#4A8C3A" stroke-width="1.5"/><rect x="16" y="2" width="14" height="36" rx="0 3 3 0" fill="#4A8C3A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#4A8C3A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.2;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#2A8A7A" stroke-width="1.5"/><rect x="2" y="2" width="14" height="36" rx="3 0 0 3" fill="#2A8A7A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#2A8A7A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.14;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#6BAD52" stroke-width="1.5"/><rect x="16" y="2" width="14" height="36" rx="0 3 3 0" fill="#6BAD52" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#6BAD52" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/></svg>
-                            <!-- Duplicate for seamless loop -->
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.2;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#4A8C3A" stroke-width="1.5"/><rect x="2" y="2" width="14" height="36" rx="3 0 0 3" fill="#4A8C3A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#4A8C3A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.14;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#2A8A7A" stroke-width="1.5"/><rect x="16" y="2" width="14" height="36" rx="0 3 3 0" fill="#2A8A7A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#2A8A7A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.2;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#6BAD52" stroke-width="1.5"/><rect x="2" y="2" width="14" height="36" rx="3 0 0 3" fill="#6BAD52" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#6BAD52" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.14;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#4A8C3A" stroke-width="1.5"/><rect x="16" y="2" width="14" height="36" rx="0 3 3 0" fill="#4A8C3A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#4A8C3A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#4A8C3A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#4A8C3A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.2;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#2A8A7A" stroke-width="1.5"/><rect x="2" y="2" width="14" height="36" rx="3 0 0 3" fill="#2A8A7A" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#2A8A7A" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#2A8A7A" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#2A8A7A" opacity="0.06"/></svg>
-                            <svg width="32" height="40" viewBox="0 0 32 40" style="flex-shrink:0;opacity:0.14;"><rect x="2" y="2" width="28" height="36" rx="3" fill="none" stroke="#6BAD52" stroke-width="1.5"/><rect x="16" y="2" width="14" height="36" rx="0 3 3 0" fill="#6BAD52" opacity="0.08"/><line x1="16" y1="2" x2="16" y2="38" stroke="#6BAD52" stroke-width="1"/><circle cx="13" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><circle cx="19" cy="20" r="1.5" fill="#6BAD52" opacity="0.4"/><rect x="6" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/><rect x="20" y="6" width="6" height="4" rx="1" fill="#6BAD52" opacity="0.06"/></svg>
-                        </div>
-                    </div>
+                <section id="money" class="section">
+                    <!-- Door ticker removed -->
 
                     <h3>Top Lobbying Spenders</h3>
-                    <p style="color: var(--muted); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">Tracking lobbying expenditures, key personnel, and influence strategies of major AI and tech companies in Washington.</p>
 
                     <div class="chart-card" style="margin-bottom:24px;">
                         <div class="chart-title">Federal Lobbying Spend</div>
@@ -2938,7 +2774,6 @@
                     <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px;">
                     <div class="chart-card">
                         <div class="chart-title">Age Verification Vendors</div>
-                        <p style="font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:16px;">These companies stand to profit directly from age verification mandates. As more states pass laws requiring ID checks on platforms, these vendors become the gatekeepers of online access — raising questions about privacy, data collection, and who controls digital identity.</p>
                         <div class="bar-chart">
                             <div class="bar-item">
                                 <div class="bar-label">Jumio</div>
@@ -3016,57 +2851,33 @@
                         <div id="lob-dots" style="display:flex;justify-content:center;gap:8px;margin-top:16px;"></div>
                     </div>
 
-                </section>
-
-                <!-- SECTION 5: CAMPAIGN FINANCE -->
-                <section id="campaign" class="section">
                     <h3>Campaign Finance & Industry Influence</h3>
                     <div class="money-section">
-                        <div class="info-box" style="position:relative; cursor:pointer;" onclick="window.open('https://www.opensecrets.org/political-action-committees-pacs','_blank')">
+                        <div class="info-box" style="position:relative; cursor:pointer;" onclick="window.open('https://www.opensecrets.org/political-action-committees-pacs','_blank','noopener,noreferrer')">
                             <div class="info-title">PAC Contributions to Key Committee Members <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
                             <div class="info-content">
-                                Tech industry PACs have contributed over $50M to members of Senate Commerce Committee and House Energy & Commerce Committee in the 2023-2024 cycle, focusing heavily on candidates opposing strict AI regulation. <a href="https://www.opensecrets.org/political-action-committees-pacs" target="_blank" style="color: var(--primary); font-weight: 600;">View PAC data on OpenSecrets</a>
+                                Tech PACs contributed $50M+ to Senate and House Commerce committees (2023-2024), targeting opponents of AI regulation. <a href="https://www.opensecrets.org/political-action-committees-pacs" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: 600;">View PAC data on OpenSecrets</a>
                             </div>
                         </div>
 
-                        <div class="info-box" style="position:relative; cursor:pointer;" onclick="window.open('https://www.opensecrets.org/revolving-door','_blank')">
-                            <div class="info-title">Revolving Door: Tech to Government <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
-                            <div class="info-content">
-                                Major tech executives have moved into regulatory positions: Former Meta policy director now leads FTC AI division; Google lawyer appointed as head of USPTO AI standards committee. <a href="https://www.opensecrets.org/revolving-door" target="_blank" style="color: var(--primary); font-weight: 600;">Track the revolving door</a>
-                            </div>
-                        </div>
-
-                        <div class="info-box warning" style="position:relative; cursor:pointer;" onclick="window.open('https://www.opensecrets.org/dark-money','_blank')">
+                        <div class="info-box warning" style="position:relative; cursor:pointer;" onclick="window.open('https://www.opensecrets.org/dark-money','_blank','noopener,noreferrer')">
                             <div class="info-title">Dark Money Spending Surge <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
                             <div class="info-content">
-                                501(c)(4) and 527 organizations funded by major platforms spent over $200M in 2024 on issue advertising and campaigns opposing strict age verification and algorithmic accountability requirements. <a href="https://www.opensecrets.org/dark-money" target="_blank" style="color: var(--primary); font-weight: 600;">Explore dark money data</a>
+                                501(c)(4) organizations funded by platforms spent $200M+ in 2024 opposing age verification and algorithmic accountability. <a href="https://www.opensecrets.org/dark-money" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: 600;">Explore dark money data</a>
                             </div>
                         </div>
 
-                        <div class="info-box critical" style="position:relative; cursor:pointer;" onclick="window.open('https://www.opensecrets.org/industries/indus?ind=B13','_blank')">
+                        <div class="info-box critical" style="position:relative; cursor:pointer;" onclick="window.open('https://www.opensecrets.org/industries/indus?ind=B13','_blank','noopener,noreferrer')">
                             <div class="info-title">Candidate Funding Patterns <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
                             <div class="info-content">
-                                Analysis shows 75% correlation between voting against algorithmic accountability bills and receiving tech industry campaign donations. <a href="https://www.opensecrets.org/industries/indus?ind=B13" target="_blank" style="color: var(--primary); font-weight: 600;">View tech industry donations</a>
+                                75% correlation between voting against AI accountability bills and receiving tech industry donations. <a href="https://www.opensecrets.org/industries/indus?ind=B13" target="_blank" rel="noopener noreferrer" style="color: var(--primary); font-weight: 600;">View tech industry donations</a>
                             </div>
                         </div>
 
-                        <div class="info-box warning" style="position:relative; cursor:pointer;" onclick="window.open('https://www.opensecrets.org/dark-money/explore','_blank')">
-                            <div class="info-title">Dark Money Organizations <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
-                            <div class="info-content">
-                                <strong>Digital Childhood Alliance</strong> (501(c)(4)) — Funded by Meta and other platforms to shape age verification policy while maintaining distance from corporate lobbying. Additional dark money groups including <strong>AI Innovation Alliance</strong> and <strong>Center for Technology Freedom</strong> have collectively spent over $120M opposing algorithmic accountability legislation without disclosing corporate donors. <a href="https://www.opensecrets.org/dark-money/explore" target="_blank" style="color: var(--primary); font-weight: 600;">Explore dark money networks</a>
-                            </div>
-                        </div>
 
-                        <div class="info-box critical" style="position:relative; cursor:pointer;" onclick="window.open('https://www.opensecrets.org/federal-lobbying/top-spenders','_blank')">
-                            <div class="info-title">$2B Lobbying Investigation (March 2026) <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
-                            <div class="info-content">
-                                Major ongoing investigation by System76 and WebProNews reveals approximately <strong>$2 billion</strong> in AI industry lobbying and dark money spending designed to influence AI regulation. The report shows significant influence on policy outcomes across federal and state levels, with spending concentrated on defeating age verification, algorithmic transparency, and AI safety mandates. <a href="https://www.opensecrets.org/federal-lobbying/top-spenders" target="_blank" style="color: var(--primary); font-weight: 600;">View lobbying data</a>
-                            </div>
-                        </div>
                     </div>
 
                     <h3 style="margin-top:32px;">Corporate AI Pledge vs. Action</h3>
-                    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">Comparing what major AI companies publicly commit to versus their lobbying activities.</p>
                     <div style="overflow-x:auto;">
                     <table>
                         <thead>
@@ -3120,7 +2931,7 @@
                 </section>
 
                 <!-- SECTION 6: COURT CASES -->
-                <section id="courts" class="section">
+                <section id="people" class="section">
                     <h3>Active Court Cases</h3>
                     <div style="position:relative;">
                         <button id="cases-prev" onclick="scrollCases(-1)" aria-label="Previous court cases" style="position:absolute;left:-16px;top:50%;transform:translateY(-50%);z-index:2;width:36px;height:36px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass-bg);backdrop-filter:blur(20px);box-shadow:var(--glass-shadow);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-dark);transition:all 0.2s;" onmouseenter="this.style.background='rgba(74,140,58,0.1)';this.style.borderColor='var(--primary)'" onmouseleave="this.style.background='var(--glass-bg)';this.style.borderColor='var(--glass-border)'">
@@ -3130,7 +2941,7 @@
                             <div id="cases-track" style="display:flex;gap:16px;transition:transform 0.4s cubic-bezier(0.25,0.1,0.25,1);align-items:flex-start;">
 
                     <div class="case-card">
-                        <a href="https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/22-555.html" target="_blank" class="case-link-overlay" title="View case details"></a>
+                        <a href="https://www.supremecourt.gov/search.aspx?filename=/docket/docketfiles/html/public/22-555.html" target="_blank" rel="noopener noreferrer" class="case-link-overlay" title="View case details"></a>
                         <div class="case-name">NetChoice v. Paxton (Texas) <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
                         <div class="case-description">
                             Industry groups challenging Texas HB 4127 and HB 4128 on constitutional grounds, arguing age verification laws violate First Amendment and due process rights.
@@ -3147,7 +2958,7 @@
                     </div>
 
                     <div class="case-card">
-                        <a href="https://casetext.com/case/netchoice-llc-v-bonta-3" target="_blank" class="case-link-overlay" title="View case details"></a>
+                        <a href="https://casetext.com/case/netchoice-llc-v-bonta-3" target="_blank" rel="noopener noreferrer" class="case-link-overlay" title="View case details"></a>
                         <div class="case-name">NetChoice v. Bonta (California) <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
                         <div class="case-description">
                             Challenge to California SB 764 algorithm limitations, claiming they violate free speech and impose unreasonable platform design requirements.
@@ -3164,7 +2975,7 @@
                     </div>
 
                     <div class="case-card">
-                        <a href="https://www.aclu.org/cases/free-speech-coalition-v-paxton" target="_blank" class="case-link-overlay" title="View case details"></a>
+                        <a href="https://www.aclu.org/cases/free-speech-coalition-v-paxton" target="_blank" rel="noopener noreferrer" class="case-link-overlay" title="View case details"></a>
                         <div class="case-name">Free Speech Coalition v. Paxton (Texas) <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
                         <div class="case-description">
                             Adult content platforms and sex worker organizations challenging age verification mandate as unworkable and discriminatory.
@@ -3181,7 +2992,7 @@
                     </div>
 
                     <div class="case-card">
-                        <a href="https://www.flsenate.gov/Session/Bill/2024/1" target="_blank" class="case-link-overlay" title="View case details"></a>
+                        <a href="https://www.flsenate.gov/Session/Bill/2024/1" target="_blank" rel="noopener noreferrer" class="case-link-overlay" title="View case details"></a>
                         <div class="case-name">NetChoice v. Moody (Florida) <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
                         <div class="case-description">
                             Constitutional challenge to Florida HB 1, which restricts social media for minors under 16, arguing vague enforcement and First Amendment violations.
@@ -3198,7 +3009,7 @@
                     </div>
 
                     <div class="case-card">
-                        <a href="https://www.aclu.org/cases/aclu-v-clearview-ai" target="_blank" class="case-link-overlay" title="View case details"></a>
+                        <a href="https://www.aclu.org/cases/aclu-v-clearview-ai" target="_blank" rel="noopener noreferrer" class="case-link-overlay" title="View case details"></a>
                         <div class="case-name">ACLU v. Clearview AI <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
                         <div class="case-description">
                             ACLU and partner organizations suing Clearview AI over unauthorized scraping and use of billions of facial images without consent, seeking damages and policy changes.
@@ -3215,7 +3026,7 @@
                     </div>
 
                     <div class="case-card">
-                        <a href="https://githubcopilotlitigation.com/" target="_blank" class="case-link-overlay" title="View case details"></a>
+                        <a href="https://githubcopilotlitigation.com/" target="_blank" rel="noopener noreferrer" class="case-link-overlay" title="View case details"></a>
                         <div class="case-name">Doe v. GitHub <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
                         <div class="case-description">
                             Copyright holders challenging GitHub Copilot for training on open source code without permission or attribution, raising broader AI training data rights questions.
@@ -3232,7 +3043,7 @@
                     </div>
 
                     <div class="case-card">
-                        <a href="https://stablediffusionlitigation.com/" target="_blank" class="case-link-overlay" title="View case details"></a>
+                        <a href="https://stablediffusionlitigation.com/" target="_blank" rel="noopener noreferrer" class="case-link-overlay" title="View case details"></a>
                         <div class="case-name">Artists v. Stability AI <svg class="case-link-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></div>
                         <div class="case-description">
                             Artists suing Stability AI (Stable Diffusion creator) for training image generation models on copyrighted artwork without consent or compensation.
@@ -3254,12 +3065,7 @@
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                         </button>
                     </div>
-                </section>
-
-                <!-- SECTION: KEY POLITICIANS -->
-                <section id="politicians" class="section">
                     <h3>Key Politicians & AI Legislation Sponsors</h3>
-                    <p style="color: var(--muted); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">Tracking the members of Congress actively shaping AI policy through legislation, committee leadership, and bipartisan coalitions.</p>
                     
                     <div style="position:relative;">
                         <button id="pol-prev" onclick="slidePoliticians(-1)" aria-label="Previous politicians" style="position:absolute;left:-16px;top:50%;transform:translateY(-50%);z-index:2;width:36px;height:36px;border-radius:50%;border:1px solid var(--glass-border);background:var(--glass-bg);backdrop-filter:blur(20px);box-shadow:var(--glass-shadow);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-dark);font-size:1.1rem;transition:all 0.2s;" onmouseenter="this.style.background='rgba(74,140,58,0.1)';this.style.borderColor='var(--primary)'" onmouseleave="this.style.background='var(--glass-bg)';this.style.borderColor='var(--glass-border)'">
@@ -3276,120 +3082,112 @@
                 </section>
 
                 <!-- SECTION 9: FORECAST -->
-                <section id="forecast" class="section">
+                <section id="outlook" class="section">
                     <h3>AI Legislation Probability Forecast</h3>
                     <div class="forecast-cards">
                         <div class="forecast-card" style="--forecast-deg: 223.2deg;">
                             <div class="forecast-title">KOSA Passes in 2026</div>
                             <div class="forecast-percent">62%</div>
-                            <div class="forecast-description">Kids Online Safety Act has bipartisan support but faces lobbying pressure. Probability increases with continued public advocacy.</div>
+                            <div class="forecast-description">Bipartisan support but heavy lobbying pressure.</div>
                         </div>
                         <div class="forecast-card" style="--forecast-deg: 162deg;">
                             <div class="forecast-title">Federal AI Safety Bill by 2027</div>
                             <div class="forecast-percent">45%</div>
-                            <div class="forecast-description">Comprehensive federal AI bill passes. Currently in early committee stages with competing proposals splitting support.</div>
+                            <div class="forecast-description">Competing proposals splitting committee support.</div>
                         </div>
                         <div class="forecast-card" style="--forecast-deg: 280.8deg;">
                             <div class="forecast-title">Age Verification Mandates Spread</div>
                             <div class="forecast-percent">78%</div>
-                            <div class="forecast-description">10+ additional states implement age verification laws by 2027, following successful early adopters (TX, FL, UT).</div>
+                            <div class="forecast-description">Following successful early adopters in TX, FL, UT.</div>
                         </div>
                         <div class="forecast-card" style="--forecast-deg: 255.6deg;">
                             <div class="forecast-title">COPPA 2.0 Rulemaking Finalized</div>
                             <div class="forecast-percent">71%</div>
-                            <div class="forecast-description">FTC completes modernized COPPA rule updates by end of 2026, affecting all platforms targeting minors.</div>
+                            <div class="forecast-description">FTC modernizing rules for all platforms targeting minors.</div>
                         </div>
                         <div class="forecast-card" style="--forecast-deg: 302.4deg;">
                             <div class="forecast-title">EU AI Act Global Adoption</div>
                             <div class="forecast-percent">84%</div>
-                            <div class="forecast-description">International jurisdictions (UK, Canada, Japan) adopt AI regulation similar to EU model by 2027, creating global standard.</div>
+                            <div class="forecast-description">UK, Canada, Japan likely to adopt similar frameworks.</div>
                         </div>
                         <div class="forecast-card" style="--forecast-deg: 136.8deg;">
                             <div class="forecast-title">Biometric Privacy Federal Law</div>
                             <div class="forecast-percent">38%</div>
-                            <div class="forecast-description">Federal biometric privacy law passes Congress. State BIPA expansions more likely in near term than federal action.</div>
+                            <div class="forecast-description">State expansions more likely than federal action.</div>
                         </div>
                         <div class="forecast-card" style="--forecast-deg: 198deg;">
                             <div class="forecast-title">Algorithmic Transparency Requirements</div>
                             <div class="forecast-percent">55%</div>
-                            <div class="forecast-description">Federal Algorithmic Accountability Act or similar passes, establishing disclosure and audit requirements.</div>
+                            <div class="forecast-description">Disclosure and audit requirements gaining momentum.</div>
                         </div>
                         <div class="forecast-card" style="--forecast-deg: 151.2deg;">
                             <div class="forecast-title">AI Training Data Copyright Settled</div>
                             <div class="forecast-percent">42%</div>
-                            <div class="forecast-description">Congress or courts establish clearer copyright rules for AI training data by 2027, impacting open source and commercial development.</div>
+                            <div class="forecast-description">Courts and Congress working toward clearer rules.</div>
                         </div>
                         <div class="forecast-card" style="--forecast-deg: 234deg;">
                             <div class="forecast-title">Mandatory AI Incident Reporting</div>
                             <div class="forecast-percent">65%</div>
-                            <div class="forecast-description">Federal legislation requiring companies to report serious AI failures, biases, or safety incidents to a centralized database by 2028, similar to aviation and medical device reporting systems.</div>
+                            <div class="forecast-description">Similar to aviation and medical device reporting systems.</div>
                         </div>
                     </div>
-                </section>
-
-                <!-- SECTION 7: RESEARCH TOOLS -->
-                <section id="research" class="section">
                     <h3>Federal Tracking Resources</h3>
                     <div class="resource-section">
                         <div class="resource-category">
                             <div class="resource-category-title">Congressional Research</div>
                             <div class="resource-links">
-                                <a href="https://www.congress.gov/" class="resource-link" target="_blank">Congress.gov - Official Bill Tracking</a>
-                                <a href="https://www.opensecrets.org/federal-lobbying" class="resource-link" target="_blank">OpenSecrets - Federal Lobbying Database</a>
-                                <a href="https://lda.senate.gov/filings/public/filing/search/" class="resource-link" target="_blank">Senate Lobbying Disclosure Acts Filing</a>
-                                <a href="https://www.fec.gov/data/" class="resource-link" target="_blank">FEC - Campaign Finance Data</a>
+                                <a href="https://www.congress.gov/" class="resource-link" target="_blank" rel="noopener noreferrer">Congress.gov - Official Bill Tracking</a>
+                                <a href="https://www.opensecrets.org/federal-lobbying" class="resource-link" target="_blank" rel="noopener noreferrer">OpenSecrets - Federal Lobbying Database</a>
+                                <a href="https://lda.senate.gov/filings/public/filing/search/" class="resource-link" target="_blank" rel="noopener noreferrer">Senate Lobbying Disclosure Acts Filing</a>
+                                <a href="https://www.fec.gov/data/" class="resource-link" target="_blank" rel="noopener noreferrer">FEC - Campaign Finance Data</a>
                             </div>
                         </div>
 
                         <div class="resource-category">
                             <div class="resource-category-title">State Tracking</div>
                             <div class="resource-links">
-                                <a href="https://www.followthemoney.org/" class="resource-link" target="_blank">Follow the Money - State Campaign Finance</a>
-                                <a href="https://www.ncsl.org/ethics/lobbyist-registration-requirements" class="resource-link" target="_blank">NCSL - State Lobbying Requirements</a>
-                                <a href="https://legiscan.com/" class="resource-link" target="_blank">LegiScan - Multi-State Bill Tracking</a>
-                                <a href="https://www.billtrack50.com/" class="resource-link" target="_blank">BillTrack50 - Legislative Intelligence</a>
+                                <a href="https://www.followthemoney.org/" class="resource-link" target="_blank" rel="noopener noreferrer">Follow the Money - State Campaign Finance</a>
+                                <a href="https://www.ncsl.org/ethics/lobbyist-registration-requirements" class="resource-link" target="_blank" rel="noopener noreferrer">NCSL - State Lobbying Requirements</a>
+                                <a href="https://legiscan.com/" class="resource-link" target="_blank" rel="noopener noreferrer">LegiScan - Multi-State Bill Tracking</a>
+                                <a href="https://www.billtrack50.com/" class="resource-link" target="_blank" rel="noopener noreferrer">BillTrack50 - Legislative Intelligence</a>
                             </div>
                         </div>
 
                         <div class="resource-category">
                             <div class="resource-category-title">Nonprofit & Organization Data</div>
                             <div class="resource-links">
-                                <a href="https://projects.propublica.org/nonprofits/" class="resource-link" target="_blank">ProPublica - Nonprofit Explorer</a>
-                                <a href="https://www.guidestar.org/" class="resource-link" target="_blank">GuideStar - Nonprofit Database</a>
-                                <a href="https://apps.irs.gov/app/eos/" class="resource-link" target="_blank">IRS Tax Exempt Organization Search</a>
+                                <a href="https://projects.propublica.org/nonprofits/" class="resource-link" target="_blank" rel="noopener noreferrer">ProPublica - Nonprofit Explorer</a>
+                                <a href="https://www.guidestar.org/" class="resource-link" target="_blank" rel="noopener noreferrer">GuideStar - Nonprofit Database</a>
+                                <a href="https://apps.irs.gov/app/eos/" class="resource-link" target="_blank" rel="noopener noreferrer">IRS Tax Exempt Organization Search</a>
                             </div>
                         </div>
 
                         <div class="resource-category">
                             <div class="resource-category-title">AI Policy Trackers</div>
                             <div class="resource-links">
-                                <a href="https://www.brennancenter.org/our-work/research-reports/artificial-intelligence-legislation-tracker" class="resource-link" target="_blank">Brennan Center - AI Legislation Tracker</a>
-                                <a href="https://www.transparencycoalition.ai/" class="resource-link" target="_blank">AI Transparency Coalition</a>
-                                <a href="https://web.archive.org/" class="resource-link" target="_blank">Wayback Machine - Historical Archives</a>
+                                <a href="https://www.brennancenter.org/our-work/research-reports/artificial-intelligence-legislation-tracker" class="resource-link" target="_blank" rel="noopener noreferrer">Brennan Center - AI Legislation Tracker</a>
+                                <a href="https://www.transparencycoalition.ai/" class="resource-link" target="_blank" rel="noopener noreferrer">AI Transparency Coalition</a>
+                                <a href="https://web.archive.org/" class="resource-link" target="_blank" rel="noopener noreferrer">Wayback Machine - Historical Archives</a>
                             </div>
                         </div>
                     </div>
-                </section>
-
-                <!-- SECTION 8: TAKE ACTION -->
-                <section id="action" class="section">
                     <h3>Contact Your Representatives</h3>
                     <div class="money-section">
                         <div class="info-box">
                             <div class="info-title">Find Your Representatives</div>
                             <div class="info-content">
-                                <a href="https://www.house.gov/representatives/find-your-representative" target="_blank">Find Your House Representative</a><br><br>
-                                <a href="https://www.senate.gov/senators/" target="_blank">Find Your Senators</a><br><br>
-                                <a href="https://www.usa.gov/elected-officials/" target="_blank">All Federal Elected Officials</a>
+                                <a href="https://www.house.gov/representatives/find-your-representative" target="_blank" rel="noopener noreferrer">Find Your House Representative</a><br><br>
+                                <a href="https://www.senate.gov/senators/" target="_blank" rel="noopener noreferrer">Find Your Senators</a><br><br>
+                                <a href="https://www.usa.gov/elected-officials/" target="_blank" rel="noopener noreferrer">All Federal Elected Officials</a>
                             </div>
                         </div>
 
                         <div class="info-box">
                             <div class="info-title">Federal Comment & Petition Platforms</div>
                             <div class="info-content">
-                                <a href="https://www.regulations.gov/" target="_blank">Regulations.gov - Federal Rulemaking Comments</a><br><br>
-                                <a href="https://www.ftc.gov/news-events/news/2024/01/ftc-seeks-updates-childrens-online-privacy-protection-rule" target="_blank">FTC COPPA 2.0 Comment Period</a><br><br>
-                                <a href="https://www.federalregister.gov/" target="_blank">Federal Register - Official Notices</a>
+                                <a href="https://www.regulations.gov/" target="_blank" rel="noopener noreferrer">Regulations.gov - Federal Rulemaking Comments</a><br><br>
+                                <a href="https://www.ftc.gov/news-events/news/2024/01/ftc-seeks-updates-childrens-online-privacy-protection-rule" target="_blank" rel="noopener noreferrer">FTC COPPA 2.0 Comment Period</a><br><br>
+                                <a href="https://www.federalregister.gov/" target="_blank" rel="noopener noreferrer">Federal Register - Official Notices</a>
                             </div>
                         </div>
                     </div>
@@ -3399,26 +3197,21 @@
                         <div class="info-box">
                             <div class="info-title">Civil Rights & Privacy Advocates</div>
                             <div class="info-content">
-                                <a href="https://www.eff.org/" target="_blank">Electronic Frontier Foundation (EFF)</a><br><br>
-                                <a href="https://www.aclu.org/issues/privacy-technology" target="_blank">ACLU - Privacy & Technology</a><br><br>
-                                <a href="https://cdt.org/" target="_blank">Center for Democracy & Technology</a>
+                                <a href="https://www.eff.org/" target="_blank" rel="noopener noreferrer">Electronic Frontier Foundation (EFF)</a><br><br>
+                                <a href="https://www.aclu.org/issues/privacy-technology" target="_blank" rel="noopener noreferrer">ACLU - Privacy & Technology</a><br><br>
+                                <a href="https://cdt.org/" target="_blank" rel="noopener noreferrer">Center for Democracy & Technology</a>
                             </div>
                         </div>
 
                         <div class="info-box">
                             <div class="info-title">Activist Networks</div>
                             <div class="info-content">
-                                <a href="https://www.fightforthefuture.org/" target="_blank">Fight for the Future</a><br><br>
-                                <a href="https://www.accessnow.org/" target="_blank">Access Now - Global Digital Rights</a>
+                                <a href="https://www.fightforthefuture.org/" target="_blank" rel="noopener noreferrer">Fight for the Future</a><br><br>
+                                <a href="https://www.accessnow.org/" target="_blank" rel="noopener noreferrer">Access Now - Global Digital Rights</a>
                             </div>
                         </div>
                     </div>
-                </section>
-
-                <!-- SECTION 10: GLOBAL -->
-                <section id="global" class="section">
                     <h3>Global AI Regulation Landscape</h3>
-                    <p style="color:var(--muted);font-size:14px;margin-bottom:20px;">Hover over a highlighted country to see its AI policy details. Click to visit the official policy page.</p>
                     <div class="filter-bar" style="margin-bottom:16px;">
                         <button class="filter-btn active" onclick="filterMap('all')">All</button>
                         <button class="filter-btn" onclick="filterMap('enacted')">Enacted</button>
@@ -3444,6 +3237,12 @@
     <!-- Light mode only -->
 
     <script>
+        function escapeHtml(str) {
+            var div = document.createElement('div');
+            div.appendChild(document.createTextNode(str));
+            return div.innerHTML;
+        }
+
         // Mouse gradient tracking with RAF
         const gradient = document.getElementById('mouse-gradient');
         let mouseX = 0;
@@ -3710,50 +3509,36 @@
         }
 
         function initializeNavigation() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const sectionId = link.getAttribute('data-section');
-                    const target = document.getElementById(sectionId);
-                    if (target) {
-                        target.scrollIntoView({ behavior: 'smooth' });
-                    }
-                    navLinks.forEach(l => l.classList.remove('active'));
-                    link.classList.add('active');
-                });
-            });
+            var navLinks = document.querySelectorAll('.desktop-app-view .nav-link');
+            var sectionIds = Array.from(navLinks).map(function(l) { return l.getAttribute('data-section'); });
 
-            // Scroll-spy: highlight nav link based on scroll position
-            const sectionIds = Array.from(navLinks).map(l => l.getAttribute('data-section'));
-            let ticking = false;
-            window.addEventListener('scroll', function() {
-                if (!ticking) {
-                    window.requestAnimationFrame(function() {
-                        let current = sectionIds[0];
-                        for (let i = 0; i < sectionIds.length; i++) {
-                            const sec = document.getElementById(sectionIds[i]);
-                            if (sec) {
-                                const rect = sec.getBoundingClientRect();
-                                if (rect.top <= 120) {
-                                    current = sectionIds[i];
-                                }
-                            }
-                        }
-                        navLinks.forEach(l => {
-                            l.classList.toggle('active', l.getAttribute('data-section') === current);
-                        });
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
+            navLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    var sectionId = link.getAttribute('data-section');
+                    showSection(sectionId);
+                    navLinks.forEach(function(l) { l.classList.remove('active'); });
+                    link.classList.add('active');
+                    // Update header title
+                    var titleEl = document.getElementById('section-title');
+                    if (titleEl) titleEl.textContent = link.getAttribute('title') || sectionId;
+                });
             });
         }
 
         function showSection(sectionId) {
-            // Legacy stub — all sections are now always visible
-            var el = document.getElementById(sectionId);
-            if (el) el.scrollIntoView({ behavior: 'smooth' });
+            var allSections = document.querySelectorAll('.desktop-app-view .section');
+            allSections.forEach(function(sec) { sec.classList.remove('active'); });
+            var target = document.getElementById(sectionId);
+            if (target) {
+                target.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Re-trigger animations for the newly visible section
+                if (sectionId === 'bills') {
+                    animateStatCounters();
+                    animateBars();
+                }
+            }
         }
 
         var billsPage = 0;
@@ -3780,11 +3565,11 @@
 
             pageBills.forEach(function(bill) {
                 var row = document.createElement('tr');
-                row.innerHTML = '<td><a href="' + bill.url + '" class="bill-link" target="_blank">' + bill.name + '</a></td>' +
-                    '<td>' + bill.level + '</td>' +
-                    '<td>' + bill.category + '</td>' +
-                    '<td><span class="status-badge status-' + bill.status.toLowerCase().replace(/\s+/g, '-') + '">' + bill.status + '</span></td>' +
-                    '<td style="font-size: 13px; color: var(--muted);">' + bill.summary + '</td>';
+                row.innerHTML = '<td><a href="' + encodeURI(bill.url) + '" class="bill-link" target="_blank" rel="noopener noreferrer">' + escapeHtml(bill.name) + '</a></td>' +
+                    '<td>' + escapeHtml(bill.level) + '</td>' +
+                    '<td>' + escapeHtml(bill.category) + '</td>' +
+                    '<td><span class="status-badge status-' + bill.status.toLowerCase().replace(/\s+/g, '-') + '">' + escapeHtml(bill.status) + '</span></td>' +
+                    '<td style="font-size: 13px; color: var(--muted);">' + escapeHtml(bill.summary) + '</td>';
                 tbody.appendChild(row);
             });
 
@@ -3962,7 +3747,7 @@
                     rights: 'Civil Rights Advocate'
                 };
                 selectedRolesContainer.innerHTML = selectedPersonas.map(p =>
-                    `<span class="selected-role-tag">${roleNames[p] || p}<span class="remove-role" data-persona="${p}">&times;</span></span>`
+                    `<span class="selected-role-tag">${escapeHtml(roleNames[p] || p)}<span class="remove-role" data-persona="${escapeHtml(p)}">&times;</span></span>`
                 ).join('');
 
                 selectedRolesContainer.querySelectorAll('.remove-role').forEach(btn => {
@@ -4000,12 +3785,12 @@
                 allImpacts.forEach(impact => {
                     const card = document.createElement('div');
                     card.className = `impact-card impact-severity-${impact.severity}`;
-                    var linkHtml = impact.url ? `<a href="${impact.url}" target="_blank" class="impact-link">Read the policy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:3px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : '';
+                    var linkHtml = impact.url ? `<a href="${encodeURI(impact.url)}" target="_blank" rel="noopener noreferrer" class="impact-link">Read the policy <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-left:3px;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg></a>` : '';
                     card.innerHTML = `
-                        <div class="impact-title">${impact.title}</div>
-                        <div class="impact-description">${impact.desc}</div>
+                        <div class="impact-title">${escapeHtml(impact.title)}</div>
+                        <div class="impact-description">${escapeHtml(impact.desc)}</div>
                         <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
-                            <span class="impact-severity">${impact.severity.charAt(0).toUpperCase() + impact.severity.slice(1)} Impact</span>
+                            <span class="impact-severity">${escapeHtml(impact.severity.charAt(0).toUpperCase() + impact.severity.slice(1))} Impact</span>
                             ${linkHtml}
                         </div>
                     `;
@@ -4112,7 +3897,7 @@
                     const evt = calendarEvents.find(e => e.date === date);
                     if (evt) {
                         const colors = { federal: '#4A8C3A', state: '#6BAD52', comment: '#2A8A7A', international: '#3DA898' };
-                        detail.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${colors[evt.type]};"></span><strong style="color:#e4e4e7;">${evt.title}</strong><span style="color:#71717a;font-size:12px;margin-left:auto;">${evt.date}</span></div><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin:0;">${evt.desc}</p>`;
+                        detail.innerHTML = `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;"><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${colors[evt.type]};"></span><strong style="color:#e4e4e7;">${escapeHtml(evt.title)}</strong><span style="color:#71717a;font-size:12px;margin-left:auto;">${escapeHtml(evt.date)}</span></div><p style="color:#a1a1aa;font-size:13px;line-height:1.5;margin:0;">${escapeHtml(evt.desc)}</p>`;
                     }
                 });
             });
@@ -4157,7 +3942,7 @@
             '300': { name: 'Greece', policy: 'EU AI Act Implementation', status: 'enacted', desc: 'Implementing EU AI Act. National AI Strategy 2024.', url: 'https://artificialintelligenceact.eu/' },
             '203': { name: 'Czech Republic', policy: 'EU AI Act Implementation', status: 'enacted', desc: 'Implementing EU AI Act for industry and public sector.', url: 'https://artificialintelligenceact.eu/' },
             '642': { name: 'Romania', policy: 'EU AI Act Implementation', status: 'enacted', desc: 'Implementing EU AI Act. Developing national framework.', url: 'https://artificialintelligenceact.eu/' },
-            '156': { name: 'China', policy: 'Generative AI Regulations', status: 'enacted', desc: 'Content governance, security review, data localization. Algorithm registry.', url: 'http://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm' },
+            '156': { name: 'China', policy: 'Generative AI Regulations', status: 'enacted', desc: 'Content governance, security review, data localization. Algorithm registry.', url: 'https://www.cac.gov.cn/2023-07/13/c_1690898327029107.htm' },
             '392': { name: 'Japan', policy: 'AI Guidelines Framework', status: 'guidelines', desc: 'Voluntary industry guidelines on data governance and AI safety.', url: 'https://www.meti.go.jp/english/policy/mono_info_service/information_economy/artificial_intelligence.html' },
             '410': { name: 'South Korea', policy: 'AI Ethics Framework', status: 'progress', desc: 'Algorithmic discrimination prevention. Binding legislation pending.', url: 'https://www.msit.go.kr/eng/index.do' },
             '702': { name: 'Singapore', policy: 'AI Governance Framework', status: 'guidelines', desc: 'Model AI Governance Framework. International AI hub.', url: 'https://www.pdpc.gov.sg/help-and-resources/2020/01/model-ai-governance-framework' },
@@ -4245,7 +4030,7 @@
                         if (tx + 300 > r.width) tx = tx - 330;
                         if (ty + 150 > r.height) ty = ty - 130;
                         if (ty < 10) ty = 10;
-                        tooltip.innerHTML = '<div class="tt-country">' + policy.name + '</div><div class="tt-policy">' + policy.policy + '</div><div class="tt-desc">' + policy.desc + '</div><div class="tt-link">Click to visit official policy page</div>';
+                        tooltip.innerHTML = '<div class="tt-country">' + escapeHtml(policy.name) + '</div><div class="tt-policy">' + escapeHtml(policy.policy) + '</div><div class="tt-desc">' + escapeHtml(policy.desc) + '</div><div class="tt-link">Click to visit official policy page</div>';
                         tooltip.style.left = tx + 'px'; tooltip.style.top = ty + 'px';
                         tooltip.style.display = 'block';
                     });
@@ -4264,7 +4049,7 @@
                         tooltip.style.display = 'none';
                     });
                     el.addEventListener('click', function() {
-                        if (policy.url) window.open(policy.url, '_blank');
+                        if (policy.url) window.open(policy.url, '_blank', 'noopener,noreferrer');
                     });
                 }
                 svgEl.appendChild(el);
@@ -4415,21 +4200,21 @@ function renderPoliticianCards() {
         var pc = partyColors[p.party] || '#777';
         var partyLabel = p.party === 'D' ? 'Democrat' : p.party === 'R' ? 'Republican' : 'Independent';
         var billsHtml = p.bills.map(function(b) {
-            return '<span style="display:inline-block;padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:600;background:rgba(74,140,58,0.08);color:var(--primary);margin:2px 4px 2px 0;">' + b + '</span>';
+            return '<span style="display:inline-block;padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:600;background:rgba(74,140,58,0.08);color:var(--primary);margin:2px 4px 2px 0;">' + escapeHtml(b) + '</span>';
         }).join('');
 
-        return '<div class="pol-card" style="min-width:calc(33.333% - 11px);max-width:calc(33.333% - 11px);flex-shrink:0;background:var(--glass-bg);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:16px;padding:20px;box-shadow:var(--glass-shadow);position:relative;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;" onclick="window.open(\''+p.url+'\',\'_blank\')" onmouseenter="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 4px 20px rgba(26,46,40,0.12)\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'var(--glass-shadow)\'">'+
+        return '<div class="pol-card" style="min-width:calc(33.333% - 11px);max-width:calc(33.333% - 11px);flex-shrink:0;background:var(--glass-bg);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:16px;padding:20px;box-shadow:var(--glass-shadow);position:relative;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;" onclick="window.open(\''+encodeURI(p.url)+'\',\'_blank\',\'noopener,noreferrer\')" onmouseenter="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 4px 20px rgba(26,46,40,0.12)\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'var(--glass-shadow)\'">'+
             '<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">'+
                 '<div style="width:10px;height:10px;border-radius:50%;background:'+pc+';flex-shrink:0;"></div>'+
-                '<div style="font-weight:700;font-size:1rem;color:var(--text-dark);flex:1;">'+p.name+'</div>'+
+                '<div style="font-weight:700;font-size:1rem;color:var(--text-dark);flex:1;">'+escapeHtml(p.name)+'</div>'+
                 '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" style="flex-shrink:0;opacity:0.5;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'+
             '</div>'+
             '<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap;">'+
-                '<span style="display:inline-block;padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:600;background:'+pc+'22;color:'+pc+';">'+partyLabel+' ('+p.state+')</span>'+
+                '<span style="display:inline-block;padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:600;background:'+pc+'22;color:'+pc+';">'+escapeHtml(partyLabel)+' ('+escapeHtml(p.state)+')</span>'+
                 '<span style="display:inline-block;padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:600;background:'+sc.bg+';color:'+sc.text+';">'+sc.label+'</span>'+
             '</div>'+
-            '<div style="font-size:0.8rem;color:var(--muted);margin-bottom:8px;">'+p.role+'</div>'+
-            '<div style="font-size:0.85rem;color:var(--text-dark);line-height:1.55;margin-bottom:12px;">'+p.desc+'</div>'+
+            '<div style="font-size:0.8rem;color:var(--muted);margin-bottom:8px;">'+escapeHtml(p.role)+'</div>'+
+            '<div style="font-size:0.85rem;color:var(--text-dark);line-height:1.55;margin-bottom:12px;">'+escapeHtml(p.desc)+'</div>'+
             '<div style="display:flex;flex-wrap:wrap;gap:2px;">'+billsHtml+'</div>'+
         '</div>';
     }).join('');
@@ -4611,29 +4396,29 @@ function renderLobbyistCards() {
         var cardGreen = cardGreens[idx] || cardGreens[cardGreens.length - 1];
         var peopleHtml = l.keyPeople.map(function(p) {
             return '<div style="padding:8px 0;border-bottom:1px solid rgba(43,58,78,0.04);">'+
-                '<div style="font-weight:600;font-size:0.85rem;color:var(--text-dark);">'+p.name+'</div>'+
-                '<div style="font-size:0.78rem;color:var(--primary);">'+p.role+'</div>'+
-                '<div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">'+p.note+'</div>'+
+                '<div style="font-weight:600;font-size:0.85rem;color:var(--text-dark);">'+escapeHtml(p.name)+'</div>'+
+                '<div style="font-size:0.78rem;color:var(--primary);">'+escapeHtml(p.role)+'</div>'+
+                '<div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">'+escapeHtml(p.note)+'</div>'+
             '</div>';
         }).join('');
 
         var initiativesHtml = l.keyInitiatives.map(function(i) {
             return '<div style="display:flex;align-items:flex-start;gap:6px;margin-bottom:6px;">'+
                 '<div style="width:5px;height:5px;border-radius:50%;background:'+cardGreen+';margin-top:6px;flex-shrink:0;"></div>'+
-                '<div style="font-size:0.82rem;color:var(--text-dark);line-height:1.5;">'+i+'</div>'+
+                '<div style="font-size:0.82rem;color:var(--text-dark);line-height:1.5;">'+escapeHtml(i)+'</div>'+
             '</div>';
         }).join('');
 
-        return '<div class="lob-card" style="min-width:calc(33.333% - 11px);max-width:calc(33.333% - 11px);flex-shrink:0;background:var(--glass-bg);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:16px;padding:20px;box-shadow:var(--glass-shadow);border-top:3px solid '+cardGreen+';position:relative;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;" onclick="window.open(\''+l.url+'\',\'_blank\')" onmouseenter="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 4px 20px rgba(26,46,40,0.12)\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'var(--glass-shadow)\'">'+
+        return '<div class="lob-card" style="min-width:calc(33.333% - 11px);max-width:calc(33.333% - 11px);flex-shrink:0;background:var(--glass-bg);backdrop-filter:blur(20px);border:1px solid var(--glass-border);border-radius:16px;padding:20px;box-shadow:var(--glass-shadow);border-top:3px solid '+cardGreen+';position:relative;transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;" onclick="window.open(\''+encodeURI(l.url)+'\',\'_blank\',\'noopener,noreferrer\')" onmouseenter="this.style.transform=\'translateY(-2px)\';this.style.boxShadow=\'0 4px 20px rgba(26,46,40,0.12)\'" onmouseleave="this.style.transform=\'none\';this.style.boxShadow=\'var(--glass-shadow)\'">'+
             '<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">'+
-                '<div style="width:40px;height:40px;border-radius:10px;background:'+cardGreen+'18;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.95rem;color:'+cardGreen+';">'+l.logo+'</div>'+
+                '<div style="width:40px;height:40px;border-radius:10px;background:'+cardGreen+'18;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.95rem;color:'+cardGreen+';">'+escapeHtml(l.logo)+'</div>'+
                 '<div style="flex:1;">'+
-                    '<div style="font-weight:700;font-size:1.05rem;color:var(--text-dark);">'+l.company+'</div>'+
-                    '<div style="font-size:0.78rem;color:var(--muted);">'+l.lobbyistCount+' registered lobbyists  ·  '+l.spend2025+' (2025)</div>'+
+                    '<div style="font-weight:700;font-size:1.05rem;color:var(--text-dark);">'+escapeHtml(l.company)+'</div>'+
+                    '<div style="font-size:0.78rem;color:var(--muted);">'+escapeHtml(String(l.lobbyistCount))+' registered lobbyists  ·  '+escapeHtml(l.spend2025)+' (2025)</div>'+
                 '</div>'+
                 '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="2" style="flex-shrink:0;opacity:0.5;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>'+
             '</div>'+
-            '<div style="padding:3px 10px;display:inline-block;border-radius:50px;font-size:0.72rem;font-weight:600;background:rgba(42,138,122,0.10);color:#2A8A7A;margin-bottom:12px;">'+l.stance+'</div>'+
+            '<div style="padding:3px 10px;display:inline-block;border-radius:50px;font-size:0.72rem;font-weight:600;background:rgba(42,138,122,0.10);color:#2A8A7A;margin-bottom:12px;">'+escapeHtml(l.stance)+'</div>'+
             '<div style="font-weight:600;font-size:0.82rem;color:var(--text-dark);margin-bottom:8px;">Key People</div>'+
             peopleHtml+
             '<div style="font-weight:600;font-size:0.82rem;color:var(--text-dark);margin-top:14px;margin-bottom:8px;">Key Initiatives</div>'+
@@ -4918,7 +4703,7 @@ function initCivicFlipCards() {
         var back = document.createElement('div');
         back.className = 'civic-card-back';
         back.innerHTML = '<div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--primary);margin-bottom:12px;">Ask yourself</div>' +
-            '<div style="font-size:15px;color:var(--text-dark);line-height:1.7;font-style:italic;">' + promptText + '</div>' +
+            '<div style="font-size:15px;color:var(--text-dark);line-height:1.7;font-style:italic;">' + escapeHtml(promptText) + '</div>' +
             '';
 
         inner.appendChild(front);
@@ -4985,9 +4770,8 @@ function initCivicStagger() {
                 l.classList.remove('active');
                 if (l.getAttribute('data-section') === section) l.classList.add('active');
             });
-            // Trigger the same section switching as desktop nav
-            var navLink = document.querySelector('.sidebar-nav a[data-section="' + section + '"]');
-            if (navLink) navLink.click();
+            // Switch to the section
+            showSection(section);
             closeDrawer();
         });
     });
@@ -5045,5 +4829,260 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
+    </div><!-- end .desktop-app-view -->
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- MOBILE VIEW (hidden on desktop >768px)        -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="mobile-app-view bg-page-gradient-m text-on-surface-m min-h-screen pb-32">
+
+        <!-- Mobile TopAppBar -->
+        <header class="fixed top-0 left-0 right-0 z-50 bg-[#edffe1]/60 backdrop-blur-xl border-b border-white/20 flex justify-between items-center w-full px-6 py-3 transition-colors duration-200">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-emerald-900">gavel</span>
+                <h1 class="text-xl font-extrabold text-emerald-900 tracking-tight">The Lobby</h1>
+            </div>
+            <div class="h-9 w-9 rounded-full overflow-hidden bg-[#d5e8ca] border-2 border-white/50 shadow-sm flex items-center justify-center">
+                <span class="material-symbols-outlined text-emerald-800 text-lg">person</span>
+            </div>
+        </header>
+
+        <main class="pt-20 px-4 space-y-8">
+
+            <!-- Search Section -->
+            <section class="mt-4">
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                        <span class="material-symbols-outlined text-[#41493c]/60">search</span>
+                    </div>
+                    <input class="w-full bg-white/40 backdrop-blur-md border border-white/60 rounded-xl py-4 pl-12 pr-4 text-[#111f0c] focus:ring-2 focus:ring-[#28691b]/10 placeholder:text-[#41493c]/50 shadow-sm" placeholder="Search bills, politicians, or operators..." type="text" id="mobile-search-input"/>
+                </div>
+            </section>
+
+            <!-- Legislative Pipeline Widget -->
+            <section>
+                <div class="flex items-baseline justify-between mb-4 px-1">
+                    <h2 class="text-lg font-bold tracking-tight text-[#111f0c]">Legislative Pipeline</h2>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#28691b]">Live Updates</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-gradient-to-br from-[#d5e8ca] to-white/30 p-4 rounded-2xl flex flex-col items-center text-center space-y-2 shadow-sm border border-white/40">
+                        <div class="w-2 h-2 rounded-full bg-[#7dd6c4]"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-tighter text-[#41493c]">In Discussion</span>
+                        <span class="text-2xl font-extrabold text-[#28691b]">14</span>
+                    </div>
+                    <div class="bg-gradient-to-br from-[#d5e8ca] to-white/30 p-4 rounded-2xl flex flex-col items-center text-center space-y-2 shadow-sm border border-white/40">
+                        <div class="w-2 h-2 rounded-full bg-[#418332]"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-tighter text-[#41493c]">Under Review</span>
+                        <span class="text-2xl font-extrabold text-[#28691b]">08</span>
+                    </div>
+                    <div class="bg-[#28691b] bg-gradient-to-br from-[#28691b] to-[#418332] p-4 rounded-2xl flex flex-col items-center text-center space-y-2 shadow-lg ring-1 ring-white/20">
+                        <div class="w-2 h-2 rounded-full bg-white"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-tighter text-white/80">Enacted</span>
+                        <span class="text-2xl font-extrabold text-white">03</span>
+                    </div>
+                </div>
+
+                <!-- Featured Bill Card -->
+                <div class="mt-4 bg-gradient-to-br from-white/60 to-[#e6f9da]/40 p-5 rounded-2xl border border-white shadow-sm ring-1 ring-[#28691b]/5">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-[10px] font-bold text-[#28691b] uppercase bg-[#acf595]/40 px-2 py-0.5 rounded-full">High Priority</span>
+                        <span class="text-[10px] text-[#41493c]/60 font-medium tracking-tight">HB-4029</span>
+                    </div>
+                    <h3 class="text-sm font-bold text-[#111f0c] leading-tight mb-4">AI Safety & Accountability Framework Act</h3>
+                    <div class="flex items-center justify-between">
+                        <div class="flex -space-x-2">
+                            <div class="w-7 h-7 rounded-full bg-white border-2 border-[#e6f9da] flex items-center justify-center shadow-sm">
+                                <span class="material-symbols-outlined text-[14px]">person</span>
+                            </div>
+                            <div class="w-7 h-7 rounded-full bg-white border-2 border-[#e6f9da] flex items-center justify-center shadow-sm">
+                                <span class="material-symbols-outlined text-[14px]">person</span>
+                            </div>
+                        </div>
+                        <button class="text-xs font-bold text-[#28691b] flex items-center gap-1.5 active:scale-95 transition-transform px-3 py-1.5 bg-[#acf595]/20 rounded-lg">
+                            Track Bill <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Top Lobbying Operators -->
+            <section>
+                <h2 class="text-lg font-bold tracking-tight text-[#111f0c] mb-4 px-1">Top AI Lobbying Spend</h2>
+                <div class="bg-white/40 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/60 shadow-sm">
+                    <div class="p-5 space-y-5">
+                        <!-- Operator 1 -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d5e8ca] to-white flex items-center justify-center font-black text-[#28691b] border border-white shadow-sm">1</div>
+                                <div>
+                                    <p class="text-sm font-bold text-[#111f0c]">Meta Platforms</p>
+                                    <p class="text-[10px] text-[#41493c]/70 uppercase font-semibold tracking-wider">Q3 2024</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-extrabold text-[#111f0c]">$4.8M</p>
+                                <div class="w-20 h-2 bg-[#d5e8ca] rounded-full overflow-hidden mt-1.5">
+                                    <div class="bg-gradient-to-r from-[#28691b] to-[#418332] h-full" style="width:90%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Operator 2 -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d5e8ca] to-white flex items-center justify-center font-black text-[#28691b] border border-white shadow-sm">2</div>
+                                <div>
+                                    <p class="text-sm font-bold text-[#111f0c]">Alphabet Inc.</p>
+                                    <p class="text-[10px] text-[#41493c]/70 uppercase font-semibold tracking-wider">Q3 2024</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-extrabold text-[#111f0c]">$4.2M</p>
+                                <div class="w-20 h-2 bg-[#d5e8ca] rounded-full overflow-hidden mt-1.5">
+                                    <div class="bg-gradient-to-r from-[#28691b] to-[#418332] h-full" style="width:82%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Operator 3 -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d5e8ca] to-white flex items-center justify-center font-black text-[#28691b] border border-white shadow-sm">3</div>
+                                <div>
+                                    <p class="text-sm font-bold text-[#111f0c]">Microsoft Corp.</p>
+                                    <p class="text-[10px] text-[#41493c]/70 uppercase font-semibold tracking-wider">Q3 2024</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-extrabold text-[#111f0c]">$3.9M</p>
+                                <div class="w-20 h-2 bg-[#d5e8ca] rounded-full overflow-hidden mt-1.5">
+                                    <div class="bg-gradient-to-r from-[#28691b] to-[#418332] h-full" style="width:75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/30 py-3.5 text-center active:bg-white/50 transition-colors border-t border-white/40">
+                        <button class="text-[11px] font-bold uppercase tracking-[0.15em] text-[#28691b]">View Full Leaderboard</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Campaign Finance & Influence -->
+            <section>
+                <h2 class="text-lg font-bold tracking-tight text-[#111f0c] mb-4 px-1">Campaign Finance</h2>
+                <div class="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+                    <div class="min-w-[170px] bg-gradient-to-br from-white to-[#d5e8ca] p-6 rounded-3xl shadow-sm border border-white ring-1 ring-black/5">
+                        <span class="material-symbols-outlined text-[#28691b] mb-3 bg-[#28691b]/10 w-9 h-9 flex items-center justify-center rounded-xl">account_balance</span>
+                        <p class="text-[10px] font-bold text-[#41493c]/70 uppercase tracking-tight">Total PAC Contr.</p>
+                        <p class="text-2xl font-black text-[#111f0c] mt-0.5">$12.4M</p>
+                        <p class="text-[10px] text-[#28691b] font-bold mt-2 flex items-center gap-1 bg-[#28691b]/5 w-fit px-2 py-0.5 rounded-full">
+                            <span class="material-symbols-outlined text-[12px]">trending_up</span> +14%
+                        </p>
+                    </div>
+                    <div class="min-w-[170px] bg-gradient-to-br from-white to-[#d5e8ca] p-6 rounded-3xl shadow-sm border border-white ring-1 ring-black/5">
+                        <span class="material-symbols-outlined text-[#006b5d] mb-3 bg-[#006b5d]/10 w-9 h-9 flex items-center justify-center rounded-xl">group</span>
+                        <p class="text-[10px] font-bold text-[#41493c]/70 uppercase tracking-tight">Individual Donors</p>
+                        <p class="text-2xl font-black text-[#111f0c] mt-0.5">8.2k</p>
+                        <p class="text-[10px] text-[#006b5d] font-bold mt-2 flex items-center gap-1 bg-[#006b5d]/5 w-fit px-2 py-0.5 rounded-full">
+                            <span class="material-symbols-outlined text-[12px]">trending_up</span> +3%
+                        </p>
+                    </div>
+                    <div class="min-w-[170px] bg-gradient-to-br from-white to-[#d5e8ca] p-6 rounded-3xl shadow-sm border border-white ring-1 ring-black/5">
+                        <span class="material-symbols-outlined text-[#4d6241] mb-3 bg-[#4d6241]/10 w-9 h-9 flex items-center justify-center rounded-xl">pie_chart</span>
+                        <p class="text-[10px] font-bold text-[#41493c]/70 uppercase tracking-tight">Soft Money</p>
+                        <p class="text-2xl font-black text-[#111f0c] mt-0.5">$5.1M</p>
+                        <p class="text-[10px] text-[#41493c]/50 font-bold mt-2 px-2 py-0.5 bg-black/5 w-fit rounded-full uppercase tracking-tighter">Stable</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Corporate AI Pledge vs. Action -->
+            <section class="mb-12">
+                <div class="flex items-center justify-between mb-4 px-1">
+                    <h2 class="text-lg font-bold tracking-tight text-[#111f0c]">Pledge vs. Action</h2>
+                    <span class="material-symbols-outlined text-[#41493c]/40">info</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="bg-white/40 backdrop-blur-sm p-4 rounded-2xl flex items-center justify-between border border-white/60 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-[#111f0c]">OpenAI</span>
+                            <span class="text-[10px] text-[#41493c]/80 font-medium">Transparency Commitment</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-full bg-[#96f0dd]/50 text-[10px] font-black text-[#006f61] uppercase tracking-tight">Aligned</span>
+                            <span class="material-symbols-outlined text-[#006b5d] text-base" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        </div>
+                    </div>
+                    <div class="bg-white/40 backdrop-blur-sm p-4 rounded-2xl flex items-center justify-between border border-white/60 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-[#111f0c]">Anthropic</span>
+                            <span class="text-[10px] text-[#41493c]/80 font-medium">Safety Testing Protocols</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-full bg-[#d5e8ca] text-[10px] font-black text-[#41493c]/80 uppercase tracking-tight">Partial</span>
+                            <span class="material-symbols-outlined text-[#28691b]/40 text-base">pending</span>
+                        </div>
+                    </div>
+                    <div class="bg-white/40 backdrop-blur-sm p-4 rounded-2xl flex items-center justify-between border border-white/60 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-[#111f0c]">NVIDIA</span>
+                            <span class="text-[10px] text-[#41493c]/80 font-medium">Export Compliance</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-full bg-[#ffdad6]/40 text-[10px] font-black text-[#93000a] uppercase tracking-tight">Divergent</span>
+                            <span class="material-symbols-outlined text-[#ba1a1a] text-base" style="font-variation-settings: 'FILL' 1;">warning</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Mobile BottomNavBar -->
+        <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-8 pt-4 bg-white/70 backdrop-blur-2xl z-50 rounded-t-[2.5rem] shadow-[0_-12px_40px_-10px_rgba(0,0,0,0.06)] border-t border-white">
+            <a class="flex flex-col items-center justify-center mob-nav-active active:scale-95 transition-all duration-150" href="#" data-mob-section="dash">
+                <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.15em] mt-1">Dash</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-emerald-800/40 px-5 py-2 active:scale-95 transition-all duration-150" href="#" data-mob-section="search">
+                <span class="material-symbols-outlined text-xl">search</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.15em] mt-1">Search</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-emerald-800/40 px-5 py-2 active:scale-95 transition-all duration-150" href="#" data-mob-section="stats">
+                <span class="material-symbols-outlined text-xl">analytics</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.15em] mt-1">Stats</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-emerald-800/40 px-5 py-2 active:scale-95 transition-all duration-150" href="#" data-mob-section="learn">
+                <span class="material-symbols-outlined text-xl">menu_book</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.15em] mt-1">Learn</span>
+            </a>
+        </nav>
+
+        <script>
+        // Mobile bottom nav active state toggle
+        (function() {
+            var mobNavLinks = document.querySelectorAll('.mobile-app-view nav a[data-mob-section]');
+            mobNavLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    mobNavLinks.forEach(function(l) {
+                        l.className = 'flex flex-col items-center justify-center text-emerald-800/40 px-5 py-2 active:scale-95 transition-all duration-150';
+                    });
+                    this.className = 'flex flex-col items-center justify-center mob-nav-active active:scale-95 transition-all duration-150';
+                });
+            });
+
+            // Mobile search - focus the search input when Search tab is tapped
+            var searchTab = document.querySelector('a[data-mob-section="search"]');
+            if (searchTab) {
+                searchTab.addEventListener('click', function() {
+                    var input = document.getElementById('mobile-search-input');
+                    if (input) setTimeout(function() { input.focus(); }, 100);
+                });
+            }
+        })();
+        </script>
+
+    </div><!-- end .mobile-app-view -->
+
 </body>
 </html>
