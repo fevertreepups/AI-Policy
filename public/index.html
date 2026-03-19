@@ -6,7 +6,46 @@
     <title>AI Policy Tracker - Government Bills & Regulations</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "primary-m": "#28691b",
+              "inverse-primary-m": "#91d87c",
+              "primary-container-m": "#418332",
+              "on-surface-variant-m": "#41493c",
+              "secondary-m": "#006b5d",
+              "secondary-container-m": "#96f0dd",
+              "surface-container-low-m": "#e6f9da",
+              "surface-m": "#edffe1",
+              "surface-container-highest-m": "#d5e8ca",
+              "surface-variant-m": "#d5e8ca",
+              "error-m": "#ba1a1a",
+              "outline-variant-m": "#c0c9b9",
+              "surface-container-m": "#e1f4d5",
+              "outline-m": "#717a6b",
+              "on-surface-m": "#111f0c",
+              "on-primary-m": "#ffffff",
+              "error-container-m": "#ffdad6",
+              "on-error-container-m": "#93000a",
+              "on-secondary-container-m": "#006f61",
+              "primary-fixed-m": "#acf595",
+              "tertiary-m": "#4d6241",
+              "surface-container-high-m": "#dbeecf",
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+            },
+          },
+        },
+      }
+    </script>
     <style>
         * {
             margin: 0;
@@ -2223,9 +2262,41 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        /* ── Mobile/Desktop view toggle ── */
+        .mobile-app-view { display: none; }
+        .desktop-app-view { display: block; }
+
+        @media (max-width: 768px) {
+            .mobile-app-view { display: block; }
+            .desktop-app-view { display: none !important; }
+        }
+
+        /* Mobile view styles */
+        .mobile-app-view .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mobile-app-view .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .mobile-app-view .bg-page-gradient-m {
+            background: linear-gradient(135deg, #e1f4d5 0%, #f7fff2 50%, #ffffff 100%);
+            background-attachment: fixed;
+        }
+
+        /* Mobile bottom nav active pill */
+        .mob-nav-active {
+            background: linear-gradient(135deg, #28691b, #418332);
+            color: white;
+            border-radius: 1rem;
+            padding: 0.5rem 1.5rem;
+            box-shadow: 0 4px 12px rgba(40, 105, 27, 0.2);
+        }
     </style>
 </head>
 <body>
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- DESKTOP VIEW (hidden on mobile <=768px)       -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="desktop-app-view">
     <div id="mouse-gradient"></div>
 
     <!-- Mobile nav overlay & drawer -->
@@ -4750,5 +4821,260 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
+    </div><!-- end .desktop-app-view -->
+
+    <!-- ══════════════════════════════════════════════ -->
+    <!-- MOBILE VIEW (hidden on desktop >768px)        -->
+    <!-- ══════════════════════════════════════════════ -->
+    <div class="mobile-app-view bg-page-gradient-m text-on-surface-m min-h-screen pb-32">
+
+        <!-- Mobile TopAppBar -->
+        <header class="fixed top-0 left-0 right-0 z-50 bg-[#edffe1]/60 backdrop-blur-xl border-b border-white/20 flex justify-between items-center w-full px-6 py-3 transition-colors duration-200">
+            <div class="flex items-center gap-3">
+                <span class="material-symbols-outlined text-emerald-900">gavel</span>
+                <h1 class="text-xl font-extrabold text-emerald-900 tracking-tight">The Lobby</h1>
+            </div>
+            <div class="h-9 w-9 rounded-full overflow-hidden bg-[#d5e8ca] border-2 border-white/50 shadow-sm flex items-center justify-center">
+                <span class="material-symbols-outlined text-emerald-800 text-lg">person</span>
+            </div>
+        </header>
+
+        <main class="pt-20 px-4 space-y-8">
+
+            <!-- Search Section -->
+            <section class="mt-4">
+                <div class="relative group">
+                    <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+                        <span class="material-symbols-outlined text-[#41493c]/60">search</span>
+                    </div>
+                    <input class="w-full bg-white/40 backdrop-blur-md border border-white/60 rounded-xl py-4 pl-12 pr-4 text-[#111f0c] focus:ring-2 focus:ring-[#28691b]/10 placeholder:text-[#41493c]/50 shadow-sm" placeholder="Search bills, politicians, or operators..." type="text" id="mobile-search-input"/>
+                </div>
+            </section>
+
+            <!-- Legislative Pipeline Widget -->
+            <section>
+                <div class="flex items-baseline justify-between mb-4 px-1">
+                    <h2 class="text-lg font-bold tracking-tight text-[#111f0c]">Legislative Pipeline</h2>
+                    <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-[#28691b]">Live Updates</span>
+                </div>
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="bg-gradient-to-br from-[#d5e8ca] to-white/30 p-4 rounded-2xl flex flex-col items-center text-center space-y-2 shadow-sm border border-white/40">
+                        <div class="w-2 h-2 rounded-full bg-[#7dd6c4]"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-tighter text-[#41493c]">In Discussion</span>
+                        <span class="text-2xl font-extrabold text-[#28691b]">14</span>
+                    </div>
+                    <div class="bg-gradient-to-br from-[#d5e8ca] to-white/30 p-4 rounded-2xl flex flex-col items-center text-center space-y-2 shadow-sm border border-white/40">
+                        <div class="w-2 h-2 rounded-full bg-[#418332]"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-tighter text-[#41493c]">Under Review</span>
+                        <span class="text-2xl font-extrabold text-[#28691b]">08</span>
+                    </div>
+                    <div class="bg-[#28691b] bg-gradient-to-br from-[#28691b] to-[#418332] p-4 rounded-2xl flex flex-col items-center text-center space-y-2 shadow-lg ring-1 ring-white/20">
+                        <div class="w-2 h-2 rounded-full bg-white"></div>
+                        <span class="text-[10px] font-bold uppercase tracking-tighter text-white/80">Enacted</span>
+                        <span class="text-2xl font-extrabold text-white">03</span>
+                    </div>
+                </div>
+
+                <!-- Featured Bill Card -->
+                <div class="mt-4 bg-gradient-to-br from-white/60 to-[#e6f9da]/40 p-5 rounded-2xl border border-white shadow-sm ring-1 ring-[#28691b]/5">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="text-[10px] font-bold text-[#28691b] uppercase bg-[#acf595]/40 px-2 py-0.5 rounded-full">High Priority</span>
+                        <span class="text-[10px] text-[#41493c]/60 font-medium tracking-tight">HB-4029</span>
+                    </div>
+                    <h3 class="text-sm font-bold text-[#111f0c] leading-tight mb-4">AI Safety & Accountability Framework Act</h3>
+                    <div class="flex items-center justify-between">
+                        <div class="flex -space-x-2">
+                            <div class="w-7 h-7 rounded-full bg-white border-2 border-[#e6f9da] flex items-center justify-center shadow-sm">
+                                <span class="material-symbols-outlined text-[14px]">person</span>
+                            </div>
+                            <div class="w-7 h-7 rounded-full bg-white border-2 border-[#e6f9da] flex items-center justify-center shadow-sm">
+                                <span class="material-symbols-outlined text-[14px]">person</span>
+                            </div>
+                        </div>
+                        <button class="text-xs font-bold text-[#28691b] flex items-center gap-1.5 active:scale-95 transition-transform px-3 py-1.5 bg-[#acf595]/20 rounded-lg">
+                            Track Bill <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Top Lobbying Operators -->
+            <section>
+                <h2 class="text-lg font-bold tracking-tight text-[#111f0c] mb-4 px-1">Top AI Lobbying Spend</h2>
+                <div class="bg-white/40 backdrop-blur-sm rounded-3xl overflow-hidden border border-white/60 shadow-sm">
+                    <div class="p-5 space-y-5">
+                        <!-- Operator 1 -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d5e8ca] to-white flex items-center justify-center font-black text-[#28691b] border border-white shadow-sm">1</div>
+                                <div>
+                                    <p class="text-sm font-bold text-[#111f0c]">Meta Platforms</p>
+                                    <p class="text-[10px] text-[#41493c]/70 uppercase font-semibold tracking-wider">Q3 2024</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-extrabold text-[#111f0c]">$4.8M</p>
+                                <div class="w-20 h-2 bg-[#d5e8ca] rounded-full overflow-hidden mt-1.5">
+                                    <div class="bg-gradient-to-r from-[#28691b] to-[#418332] h-full" style="width:90%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Operator 2 -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d5e8ca] to-white flex items-center justify-center font-black text-[#28691b] border border-white shadow-sm">2</div>
+                                <div>
+                                    <p class="text-sm font-bold text-[#111f0c]">Alphabet Inc.</p>
+                                    <p class="text-[10px] text-[#41493c]/70 uppercase font-semibold tracking-wider">Q3 2024</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-extrabold text-[#111f0c]">$4.2M</p>
+                                <div class="w-20 h-2 bg-[#d5e8ca] rounded-full overflow-hidden mt-1.5">
+                                    <div class="bg-gradient-to-r from-[#28691b] to-[#418332] h-full" style="width:82%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Operator 3 -->
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#d5e8ca] to-white flex items-center justify-center font-black text-[#28691b] border border-white shadow-sm">3</div>
+                                <div>
+                                    <p class="text-sm font-bold text-[#111f0c]">Microsoft Corp.</p>
+                                    <p class="text-[10px] text-[#41493c]/70 uppercase font-semibold tracking-wider">Q3 2024</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-extrabold text-[#111f0c]">$3.9M</p>
+                                <div class="w-20 h-2 bg-[#d5e8ca] rounded-full overflow-hidden mt-1.5">
+                                    <div class="bg-gradient-to-r from-[#28691b] to-[#418332] h-full" style="width:75%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white/30 py-3.5 text-center active:bg-white/50 transition-colors border-t border-white/40">
+                        <button class="text-[11px] font-bold uppercase tracking-[0.15em] text-[#28691b]">View Full Leaderboard</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Campaign Finance & Influence -->
+            <section>
+                <h2 class="text-lg font-bold tracking-tight text-[#111f0c] mb-4 px-1">Campaign Finance</h2>
+                <div class="flex gap-4 overflow-x-auto hide-scrollbar pb-2">
+                    <div class="min-w-[170px] bg-gradient-to-br from-white to-[#d5e8ca] p-6 rounded-3xl shadow-sm border border-white ring-1 ring-black/5">
+                        <span class="material-symbols-outlined text-[#28691b] mb-3 bg-[#28691b]/10 w-9 h-9 flex items-center justify-center rounded-xl">account_balance</span>
+                        <p class="text-[10px] font-bold text-[#41493c]/70 uppercase tracking-tight">Total PAC Contr.</p>
+                        <p class="text-2xl font-black text-[#111f0c] mt-0.5">$12.4M</p>
+                        <p class="text-[10px] text-[#28691b] font-bold mt-2 flex items-center gap-1 bg-[#28691b]/5 w-fit px-2 py-0.5 rounded-full">
+                            <span class="material-symbols-outlined text-[12px]">trending_up</span> +14%
+                        </p>
+                    </div>
+                    <div class="min-w-[170px] bg-gradient-to-br from-white to-[#d5e8ca] p-6 rounded-3xl shadow-sm border border-white ring-1 ring-black/5">
+                        <span class="material-symbols-outlined text-[#006b5d] mb-3 bg-[#006b5d]/10 w-9 h-9 flex items-center justify-center rounded-xl">group</span>
+                        <p class="text-[10px] font-bold text-[#41493c]/70 uppercase tracking-tight">Individual Donors</p>
+                        <p class="text-2xl font-black text-[#111f0c] mt-0.5">8.2k</p>
+                        <p class="text-[10px] text-[#006b5d] font-bold mt-2 flex items-center gap-1 bg-[#006b5d]/5 w-fit px-2 py-0.5 rounded-full">
+                            <span class="material-symbols-outlined text-[12px]">trending_up</span> +3%
+                        </p>
+                    </div>
+                    <div class="min-w-[170px] bg-gradient-to-br from-white to-[#d5e8ca] p-6 rounded-3xl shadow-sm border border-white ring-1 ring-black/5">
+                        <span class="material-symbols-outlined text-[#4d6241] mb-3 bg-[#4d6241]/10 w-9 h-9 flex items-center justify-center rounded-xl">pie_chart</span>
+                        <p class="text-[10px] font-bold text-[#41493c]/70 uppercase tracking-tight">Soft Money</p>
+                        <p class="text-2xl font-black text-[#111f0c] mt-0.5">$5.1M</p>
+                        <p class="text-[10px] text-[#41493c]/50 font-bold mt-2 px-2 py-0.5 bg-black/5 w-fit rounded-full uppercase tracking-tighter">Stable</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Corporate AI Pledge vs. Action -->
+            <section class="mb-12">
+                <div class="flex items-center justify-between mb-4 px-1">
+                    <h2 class="text-lg font-bold tracking-tight text-[#111f0c]">Pledge vs. Action</h2>
+                    <span class="material-symbols-outlined text-[#41493c]/40">info</span>
+                </div>
+                <div class="space-y-3">
+                    <div class="bg-white/40 backdrop-blur-sm p-4 rounded-2xl flex items-center justify-between border border-white/60 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-[#111f0c]">OpenAI</span>
+                            <span class="text-[10px] text-[#41493c]/80 font-medium">Transparency Commitment</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-full bg-[#96f0dd]/50 text-[10px] font-black text-[#006f61] uppercase tracking-tight">Aligned</span>
+                            <span class="material-symbols-outlined text-[#006b5d] text-base" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                        </div>
+                    </div>
+                    <div class="bg-white/40 backdrop-blur-sm p-4 rounded-2xl flex items-center justify-between border border-white/60 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-[#111f0c]">Anthropic</span>
+                            <span class="text-[10px] text-[#41493c]/80 font-medium">Safety Testing Protocols</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-full bg-[#d5e8ca] text-[10px] font-black text-[#41493c]/80 uppercase tracking-tight">Partial</span>
+                            <span class="material-symbols-outlined text-[#28691b]/40 text-base">pending</span>
+                        </div>
+                    </div>
+                    <div class="bg-white/40 backdrop-blur-sm p-4 rounded-2xl flex items-center justify-between border border-white/60 shadow-sm">
+                        <div class="flex flex-col">
+                            <span class="text-xs font-bold text-[#111f0c]">NVIDIA</span>
+                            <span class="text-[10px] text-[#41493c]/80 font-medium">Export Compliance</span>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <span class="px-2.5 py-1 rounded-full bg-[#ffdad6]/40 text-[10px] font-black text-[#93000a] uppercase tracking-tight">Divergent</span>
+                            <span class="material-symbols-outlined text-[#ba1a1a] text-base" style="font-variation-settings: 'FILL' 1;">warning</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Mobile BottomNavBar -->
+        <nav class="fixed bottom-0 left-0 w-full flex justify-around items-center px-4 pb-8 pt-4 bg-white/70 backdrop-blur-2xl z-50 rounded-t-[2.5rem] shadow-[0_-12px_40px_-10px_rgba(0,0,0,0.06)] border-t border-white">
+            <a class="flex flex-col items-center justify-center mob-nav-active active:scale-95 transition-all duration-150" href="#" data-mob-section="dash">
+                <span class="material-symbols-outlined text-xl" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.15em] mt-1">Dash</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-emerald-800/40 px-5 py-2 active:scale-95 transition-all duration-150" href="#" data-mob-section="search">
+                <span class="material-symbols-outlined text-xl">search</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.15em] mt-1">Search</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-emerald-800/40 px-5 py-2 active:scale-95 transition-all duration-150" href="#" data-mob-section="stats">
+                <span class="material-symbols-outlined text-xl">analytics</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.15em] mt-1">Stats</span>
+            </a>
+            <a class="flex flex-col items-center justify-center text-emerald-800/40 px-5 py-2 active:scale-95 transition-all duration-150" href="#" data-mob-section="learn">
+                <span class="material-symbols-outlined text-xl">menu_book</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.15em] mt-1">Learn</span>
+            </a>
+        </nav>
+
+        <script>
+        // Mobile bottom nav active state toggle
+        (function() {
+            var mobNavLinks = document.querySelectorAll('.mobile-app-view nav a[data-mob-section]');
+            mobNavLinks.forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    mobNavLinks.forEach(function(l) {
+                        l.className = 'flex flex-col items-center justify-center text-emerald-800/40 px-5 py-2 active:scale-95 transition-all duration-150';
+                    });
+                    this.className = 'flex flex-col items-center justify-center mob-nav-active active:scale-95 transition-all duration-150';
+                });
+            });
+
+            // Mobile search - focus the search input when Search tab is tapped
+            var searchTab = document.querySelector('a[data-mob-section="search"]');
+            if (searchTab) {
+                searchTab.addEventListener('click', function() {
+                    var input = document.getElementById('mobile-search-input');
+                    if (input) setTimeout(function() { input.focus(); }, 100);
+                });
+            }
+        })();
+        </script>
+
+    </div><!-- end .mobile-app-view -->
+
 </body>
 </html>
